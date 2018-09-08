@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>喵喵购书网管理后台</title>
+    <link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo" style="color:#FFB800">喵喵购书网后台管理系统</div>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;" class="managerName" style="color:#FF5722">
+                        喵喵
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">安全设置</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="/Admin/quit">退出系统</a></li>
+            </ul>
+        </div>
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                    <li class="layui-nav-item" id="BookManage">
+                        <a href="javascript:;">图书管理</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/Manager/CategoryManage" id="CatagoryManage">图书分类管理</a></dd>
+                            <dd><a href="/Manager/BookInfoManage" id="BookInfoManage">图书管理</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item" id="OrderManage">
+                        <a href="javascript:;">订单管理</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/Manager/OrderManage" id="OrderInfoManage">订单信息管理</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item" id="memberManage">
+                        <a href="javascript:;">查看会员账号</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="/Manager/MemberManage" id="memberAccountManage">所有会员信息</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 内容主体区域 -->
+        <div class="layui-body" name="rightFrame">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
+    <script src="~/Scripts/layui/layui.js"></script>
+    <script>
+        //注意：导航 依赖 element 模块，否则无法进行功能性操作
+        layui.use('element', function () {
+            var element = layui.element;
+        });
+        $(function () {
+            $.ajax({
+                url: '/Admin/islogin',
+                type: 'POST',
+                async: false,
+                success: function (res) {
+                    if (res.code == '200') {
+                        //console.log(res);
+                        $(".managerName").html("");
+                        $(".managerName").html(res.loginname);
+
+                    } else if (res.code == '100') {
+                        layui.use('layer', function () {
+                            var layer = layui.layer;
+                            layer.msg('请先登录，再操作', { icon: 5, time: 3000 }, function () {
+                                location.href = '/Admin/Login';
+                            });
+                        })
+                    }
+                }
+            });
+        })
+
+    </script>
+</body>
+<div id="divAdd" hidden style="background: rgb(254,238,189);padding:20px;">
+    <form action="/Manager/addCategory" method="post" onsubmit="return checkForm()" class="layui-form">
+        <label class="layui-form-label">分类名称：</label>
+        <input type="text" name="cname" id="cname" class="layui-input" style="width:200px;" /><br />
+        <label class="layui-form-label">分类描述：</label>
+        <textarea rows="5" cols="50" name="desc" id="desc" style="width:200px;"></textarea><br />
+        <div style="width:170px;margin:0 auto;margin-top: 20px;">
+            <input type="submit" value="添加一级分类" class="layui-btn layui-btn-xs" />&nbsp;&nbsp;&nbsp;
+            <input type="button" value="返回" class="layui-btn-primary layui-btn-xs" onclick="history.go(0)" />
+        </div>
+
+    </form>
+</div>
+<div id="divAdd2" hidden style="background: rgb(254,238,189);padding:20px;">
+    <p style="font-weight: 900; color: red"></p>
+    <form action="/Manager/addCategory" method="post" onsubmit="return checkForm2()" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类名称：</label>
+            <input type="text" name="cname" id="cname1" class="layui-input" style="width:200px;" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">一级分类：</label>
+            <select class="layui-form-select" name="pid" id="pid1" style="display:inline-block">
+                <option value="" selected="selected">===选择1级分类===</option>
+            </select>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类描述：</label>
+            <textarea rows="5" cols="50" name="desc" id="desc1" style="width:200px;"></textarea>
+        </div>
+
+        <div style="width:170px;margin:0 auto;margin-top: 20px;">
+            <input type="submit" value="添加二级分类" class="layui-btn layui-btn-xs" />&nbsp;&nbsp;&nbsp;
+            <input type="button" value="返回" class="layui-btn-primary layui-btn-xs" onclick="history.go(0)" />
+        </div>
+
+    </form>
+</div>
+<div id="divEdit" hidden style="background: rgb(254,238,189);padding:20px;">
+    <form action="/Manager/editCategory" method="post" onsubmit="return checkFormEdit()" class="layui-form">
+        <input type="hidden" name="cid" id="cidEdit" value="" />
+        <label class="layui-form-label">分类名称：</label>
+        <input type="text" name="cname" id="cnameEdit" class="layui-input" style="width:200px;" /><br />
+        <label class="layui-form-label">分类描述：</label>
+        <textarea rows="5" cols="50" name="desc" id="descEdit" style="width:200px;"></textarea><br />
+        <div style="width:170px;margin:0 auto;margin-top: 20px;">
+            <input type="submit" value="修改分类" class="layui-btn layui-btn-xs" />&nbsp;&nbsp;&nbsp;
+            <input type="button" value="返回" class="layui-btn-primary layui-btn-xs" onclick="history.go(0)" />
+        </div>
+
+    </form>
+</div>
+<div id="divEdit2" hidden style="background: rgb(254,238,189);padding:20px;">
+    <form action="/Manager/editCategory" method="post" onsubmit="return checkFormEdit2()" class="layui-form">
+        <div class="layui-form-item">
+            <input type="hidden" name="cid" id="cidEdit2" value="" />
+            <label class="layui-form-label">分类名称：</label>
+            <input type="text" name="cname" id="cnameEdit2" class="layui-input" style="width:200px;" /><br />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">一级分类：</label>
+            <select class="layui-form-select" name="pid" id="pidEdit2" style="display:inline-block">
+                <option value="" selected="selected">===选择1级分类===</option>
+            </select>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类描述：</label>
+            <textarea rows="5" cols="50" name="desc" id="descEdit2" style="width:200px;"></textarea>
+        </div>
+
+        <div style="width:170px;margin:0 auto;margin-top: 20px;">
+            <input type="submit" value="修改二级分类" class="layui-btn layui-btn-xs" />&nbsp;&nbsp;&nbsp;
+            <input type="button" value="返回" class="layui-btn-primary layui-btn-xs" onclick="history.go(0)" />
+        </div>
+
+    </form>
+</div>
+<div id="divGjSearch" style="padding:20px" hidden>
+    <form action="/Manager/gjSearch" class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-form-label">书名：</div>
+            <div class="layui-input-inline">
+                <input type="text" name="bname" value="" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-form-label">作者：</div>
+            <div class="layui-input-inline">
+                <input type="text" name="author" value="" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-form-label">出版社：</div>
+            <div class="layui-input-inline">
+                <input type="text" name="press" value="" class="layui-input" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <button type="submit" layui-submit class="layui-btn layui-btn-radius" style="margin-left: 162px;background: #FA7D14;">搜索</button>
+        </div>
+    </form>
+</div>
+<div id="divAddBook" hidden style="padding:20px">
+    <form action="/Manager/addBook" enctype="multipart/form-data" method="post" id="form" style="font-size:16px;">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">书名：</label><input id="bname" type="text" name="bname" value="" style="width:500px;" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">大图：</label>
+            <input type="file" />
+            <input type="text" id="image_w" name="image_w" value="book_img/23268958-1_b.jpg"  hidden/>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">小图：</label>
+            <input type="file"/>
+            <input type="text" id="image_b" name="image_b" value="book_img/23268958-1_b.jpg"   hidden />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">当前价：</label><input id="currPrice" type="text" name="currPrice" value="" style="width:50px;float:left" class="layui-input" />
+            <label class="layui-form-label">定价：</label><input id="price" type="text" name="price" value="" style="width:50px;float:left" class="layui-input" />
+            <label class="layui-form-label">折扣：</label><input id="discount" type="text" name="discount" value="" style="width:40px;display:inline;float:left" class="layui-input" /><label style="float:left;display:block;height:36px;line-height:36px;margin-left:10px">折</label>
+        </div>
+        <hr style="margin-left: 50px; height: 1px; color: #dcdcdc" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">作者：</label>
+            <input type="text" id="author" name="author" value="" style="width:150px;" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出版社：</label>
+            <input type="text" name="press" id="press" value="" style="width:200px;" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">出版时间：</label>
+            <input type="text" id="publishtime" name="publishtime" value="" style="width:100px;" class="layui-input" placeholder="yyyy-MM-dd" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">版次：</label>
+            <input type="text" name="edition" id="edition" value="" style="width:40px;float:left" class="layui-input" />
+            <label class="layui-form-label">页数：</label>
+            <input type="text" name="pageNum" id="pageNum" value="" style="width:50px;" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">字数：</label>
+            <input type="text" name="wordNum" id="wordNum" value="" style="width:80px;float:left;" class="layui-input" />
+            <label class="layui-form-label">印刷时间：</label>
+            <input type="text" name="printtime" id="printtime" value="" style="width:100px;" class="layui-input" placeholder="yyyy-MM-dd" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">开本：</label>
+            <input type="text" name="booksize" id="booksize" value="" style="width:30px;float: left;" class="layui-input" />
+            <label class="layui-form-label">纸张：</label>
+            <input type="text" name="paper" id="paper" value="" style="width:80px;" class="layui-input" />
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">一级分类：</label>
+            <select name="pid" id="pid" onchange="loadChildren()">
+                <option value="">====请选择1级分类====</option>
+            </select>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">二级分类：</label>
+            <select name="cid" id="cid">
+                <option value="">====请选择2级分类====</option>
+            </select>
+        </div>
+        <div class="layui-form-item" style="padding-left:30px">
+            <input type="button" id="btn" class="btn" value="新书上架">
+        </div>
+    </form>
+</div>
+</html>

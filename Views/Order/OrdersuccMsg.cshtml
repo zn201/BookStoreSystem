@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "OrdersuccMsg";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Content/CSS/Order/ordersucc.css" rel="stylesheet" />
+
+<div class="div1">
+    <span class="span1">订单已生成</span>
+</div>
+
+<div class="div2">
+    <img src="~/Content/images/duihao.jpg" class="img" />
+    <dl>
+        <dt>订单编号</dt>
+        <dd>@ViewBag.OrderInfo.oid</dd>
+        <dt>合计金额</dt>
+        <dd><span class="price_t">&yen;@ViewBag.OrderInfo.total</span></dd>
+        <dt>收货人</dt>
+        <dd>@ViewBag.OrderInfo.name</dd>
+        <dt>联系电话</dt>
+        <dd>@ViewBag.OrderInfo.phone</dd>
+        <dt>收货地址</dt>
+        <dd>@ViewBag.OrderInfo.address</dd>
+    </dl>
+    <span>喵喵购书网感谢您的支持，祝您购物愉快！</span>
+    <a href="/Order/paymentPre?oid=@ViewBag.OrderInfo.oid" id="linkPay">支付</a>
+</div>
+

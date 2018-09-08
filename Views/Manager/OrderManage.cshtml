@@ -1,0 +1,136 @@
+﻿
+@{
+    ViewBag.Title = "OrderManager";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<div style="width:500px;margin:0 auto;display:block;font-size:18px;color:red;" id="divStatus">
+    <a href="javascript:ajaxGetOrderList(1, 1, 10);">未付款</a>  |
+    <a href="javascript:ajaxGetOrderList(2, 1, 10);">已付款</a>  |
+    <a href="javascript:ajaxGetOrderList(3, 1, 10);">已发货</a>  |
+    <a href="javascript:ajaxGetOrderList(4, 1, 10);">交易成功</a>  |
+    <a href="javascript:ajaxGetOrderList(5, 1, 10);">已取消</a>
+</div>
+<div id="userList" class="layui-box">
+    <table id="mytable" lay-filter="tableDel">
+        <script type="text/html" id="bar">
+            <a class="layui-btn layui-btn-primary layui-btn-xs " lay-event="show">查看</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+        @*第一列序号*@
+        <script type="text/html" id="indexTpl">
+            {{d.LAY_TABLE_INDEX+1}}
+        </script>
+    </table>
+</div>
+<div id="page" style="margin: 0 auto;width: 80%;"></div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script>
+    $(function () {
+        $("#OrderManage").addClass('layui-nav-itemed');
+        $("#OrderInfoManage").addClass('layui-this');
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            var status = 0;
+            var count = ajaxGetOrderList(status, 1, 10);
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'page' //注意，这里是 ID，不用加 # 号
+                , count: count //数据总数，从服务端得到
+                , theme: '#FF5722'
+                , groups: 4
+                , limits: [10, 30, 60]
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                , jump: function (obj, first) {
+                    //console.log(obj)
+                    if (!first) {//首次不执行
+                        ajaxGetOrderList(status, obj.curr, obj.limit);
+                    }
+                }
+            });
+        });
+    })
+
+    function ajaxGetOrderList(status, pageItem, limit) {
+        var datas = '';
+        var url = '';
+        if (status == 0) {
+            url = '/Manager/ajaxGetOrderList';
+            datas = '{"pageItem":' + pageItem + ',"limit":' + limit + '}';//"'cid':'" + d + "', 'pageItem': '1', 'limit': '5' ";//'{name:"jack"}';
+        } else {
+            url = '/Manager/findOrderByStatus';
+            datas = '{"status":"' + status + '","pageItem":' + pageItem + ',"limit":' + limit + '}';
+        }
+        var json = JSON.parse(datas);
+        var count = 0;
+        $.ajax({
+            url: url,
+            data: json,
+            async: false,
+            type: 'POST',
+            success: function (res) {
+                //console.log(res.data);
+                if (res.code == '200') {
+                    var data = res.data;
+                    //console.log(data);
+                    count = data.TotalItems;
+                    if (data.Items.length > 0) {
+                        layui.use('table', function () {
+                            var table = layui.table;
+                            var layer = layui.layer;
+                            //第一个实例
+                            table.render({
+                                elem: '#mytable'
+                                , page: true //开启分页
+                                , data: data.Items
+                                , page: false
+                                , minWidth: 100
+                                , cols: [[ //表头
+                                    { title: '序号', templet: '#indexTpl', width: 70, align: 'center' }
+                                    //{ field: 'uid', title: '会员ID',sort: true,width:200, fixed: 'left', align: 'center' }
+                                    , { field: 'oid', title: '订单号', width: 200, align: 'center' }
+                                    , { field: 'ordertime', title: '下单时间', width: 200, align: 'center' }
+                                    , { field: 'total', title: '付款金额', width: 130, align: 'center' }
+                                    , { field: 'status', title: '订单状态', width: 100, align: 'center' }
+                                    , { field: 'name', title: '收货人', width: 100, align: 'center' }
+                                    , { field: 'phone', title: '联系电话', width: 220, align: 'center' }
+                                    , { field: 'address', title: '配送地址', width: 320, align: 'center' }
+                                    , { fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar' }
+                                ]]
+                            });
+                            //table.on('tool(tableFilter)', function (obj) {
+                            //    var data = obj.data;
+                            //    //console.log(obj)
+                            //    if (obj.event === 'del') {
+                            //        layer.confirm('确定要删除会员: ' + data.loginname + ' 的信息么？', function (index) {
+                            //            $.ajax({
+                            //                url: '/Manager/ajaxDeleteUserInfo',
+                            //                type: 'POST',
+                            //                async: false,
+                            //                data: { uid:data.uid},
+                            //                success: function (res) {
+                            //                    if (res.code == '200') {
+                            //                        layer.msg('删除成功！', { time: 2000 }, function () {
+                            //                            location.reload();
+                            //                        })
+                            //                    } else {
+                            //                        layer.msg(res.msg, { time: 2000 })
+                            //                    }
+                            //                }
+                            //            })
+                            //            layer.close(index);
+                            //        });
+                            //    }
+                            //});
+                        })
+                    }
+                }
+            }
+        })
+        return count;
+    }
+
+</script>
+

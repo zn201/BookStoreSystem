@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "MemberManage";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<div>
+    <div id="userList" class="layui-box">
+        <table id="mytable" lay-filter="tableFilter">
+            @*<script type="text/html" id="bar">
+                <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>*@
+            <script type="text/html" id="indexTpl">
+                {{d.LAY_TABLE_INDEX+1}}
+            </script>
+        </table>
+    </div>
+    <div id="page" style="margin: 0 auto;width: 65%;"></div>
+</div>
+@*<div id="editDiv">
+    <form action="/" method="post" class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">会员名:</label>
+            <div class="layui-inline">
+                <input type="text" name="loginname" class="layui-input" value="" disabled />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱:</label>
+            <div class="layui-inline">
+                <input type="text" name="email" class="layui-input" value="" disabled />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账户状态:</label>
+            <div class="layui-inline">
+                <input type="text" name="status" class="layui-input" value=""/>
+            </div>
+        </div>
+
+    </form>
+</div>*@
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script>
+    $(function () {
+        $("#memberManage").addClass('layui-nav-itemed');
+        $("#memberAccountManage").addClass('layui-this');
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            var url = '/Manager/ajaxGetUserList';
+            var count = ajaxGetUserList(url, 1, 10);
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'page' //注意，这里是 ID，不用加 # 号
+                , count: count //数据总数，从服务端得到
+                , theme: '#FF5722'
+                , groups: 4
+                , limits: [10, 30, 60]
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                , jump: function (obj, first) {
+                    //console.log(obj)
+                    if (!first) {//首次不执行
+                        ajaxGetUserList(url, obj.curr, obj.limit);
+                    }
+                }
+            });
+        });
+    })
+
+    function ajaxGetUserList(url, pageItem, limit) {
+        var datas = '{"pageItem":' + pageItem + ',"limit":' + limit + '}';//"'cid':'" + d + "', 'pageItem': '1', 'limit': '5' ";//'{name:"jack"}';
+        var json = JSON.parse(datas);
+        var count = 0;
+        $.ajax({
+            url: url,
+            data: json,
+            async: false,
+            type: 'POST',
+            success: function (res) {
+                //console.log(res.data);
+                if (res.code == '200') {
+                    var data = res.data;
+                    //console.log(data);
+                    count = data.TotalItems;
+                    if (data.Items.length > 0) {
+                        layui.use('table', function () {
+                            var table = layui.table;
+                            var layer = layui.layer;
+                            //第一个实例
+                            table.render({
+                                elem: '#mytable'
+                                , page: false //开启分页
+                                , data: data.Items
+                                , minWidth:100
+                                , cols: [[ //表头
+                                    { title: '序号', templet: '#indexTpl', width: 70, align: 'center' }
+                                    //{ field: 'uid', title: '会员ID',sort: true,width:200, fixed: 'left', align: 'center' }
+                                    , { field: 'loginname', title: '会员名', width: 200, align: 'center'}
+                                    , { field: 'email', title: '邮箱', width: 250, align: 'center' }
+                                    , { field: 'status', title: '账户状态', width: 130, align: 'center' }
+                                    , { field: 'name', title: '收货人', width: 130, align: 'center' }
+                                    , { field: 'phone', title: '电话', width: 230, align: 'center' }
+                                    , { field: 'address', title: '地址', width: 320,align: 'center' }
+                                    //, { fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar' }
+                                ]]
+                            });
+                            //table.on('tool(tableFilter)', function (obj) {
+                            //    var data = obj.data;
+                            //    //console.log(obj)
+                            //    if (obj.event === 'del') {
+                            //        layer.confirm('确定要删除会员: ' + data.loginname + ' 的信息么？', function (index) {
+                            //            $.ajax({
+                            //                url: '/Manager/ajaxDeleteUserInfo',
+                            //                type: 'POST',
+                            //                async: false,
+                            //                data: { uid:data.uid},
+                            //                success: function (res) {
+                            //                    if (res.code == '200') {
+                            //                        layer.msg('删除成功！', { time: 2000 }, function () {
+                            //                            location.reload();
+                            //                        })
+                            //                    } else {
+                            //                        layer.msg(res.msg, { time: 2000 })
+                            //                    }
+                            //                }
+                            //            })
+                            //            layer.close(index);
+                            //        });
+                            //    } 
+                            //});
+                        })
+                    }
+                }
+            }
+        })
+        return count;
+    }
+    
+</script>
+

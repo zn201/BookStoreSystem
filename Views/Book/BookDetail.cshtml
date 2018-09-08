@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "BookDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/CSS/Book/bookDetail.css" rel="stylesheet" />
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<div id="panel-right">
+    <div class="W568 title-index-books">
+        <h3>
+            <span class="bname title">Spring实战(第3版)（In Action系列中最畅销的Spring图书，近十万读者学习Spring的共同选择）</span>
+        </h3>
+        <div class="title-index-box">
+        </div>
+        <div>
+            <img align="top" src="~/Content/book_img/23254532-1_w.jpg" class="img_image_w" />
+            <div class="divBookDesc">
+                <ul class="ulDetail">
+                    <li>商品编号：4A9574F03A6B40C1B2A437237C17DEEC</li>
+                    <li>售价：<span class="price_n">&yen;40.7</span></li>
+                    <li>原价：<span class="spanPrice">&yen;59.0</span>　折扣：<span style="color: #c30;">6.9</span>折</li>
+                    <li>
+                        <table>
+                            <tr>
+                                <td colspan="3">
+                                    作者：Craig Walls 著
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    出版社：人民邮电出版社
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">出版时间：2013-06-01</td>
+                            </tr>
+                            <tr>
+                                <td>版次：1</td>
+                                <td>页数：374</td>
+                                <td>字数：48700</td>
+                            </tr>
+                            <tr>
+                                <td width="180">印刷时间：2013-06-01</td>
+                                <td>开本：16 开</td>
+                                <td>纸张：胶版纸</td>
+                            </tr>
+                        </table>
+                    </li>
+                </ul>
+                <div class="hr1"></div>
+                <div class="divForm">
+                    <div class="layui-input-block">
+                        我要买：<input id="cnt" style="width: 40px;text-align: center;color: red;font-weight: bold;" type="text" name="quantity" value="1" />件
+                    </div>
+                    <div class="layui-input-block">
+                        <a id="btn" href="javascript:;" onclick="goBuy()"></a>
+                    </div>
+                </div>
+                @*<table>
+                        <tr>
+                            <td colspan="3">
+                                作者：Craig Walls 著
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                出版社：人民邮电出版社
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">出版时间：2013-06-01</td>
+                        </tr>
+                        <tr>
+                            <td>版次：1</td>
+                            <td>页数：374</td>
+                            <td>字数：48700</td>
+                        </tr>
+                        <tr>
+                            <td width="180">印刷时间：2013-06-01</td>
+                            <td>开本：16 开</td>
+                            <td>纸张：胶版纸</td>
+                        </tr>
+                    </table>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script>
+    $(function () {
+        $(".Jtab").hide();
+        var bid = getUrlPara("bid");
+        if (bid == '') {
+            location.href = '/Home/Index';
+        }
+        //alert(bid);
+        $.ajax({
+            url: '/Book/getBookDetail',
+            data: { "bid": bid },
+            async: false,
+            type: 'POST',
+            dataType: 'JSON',
+            success: function (res) {
+                //console.log(res);
+                var html = "";
+                if (res.code == '200') {
+                    if (res.data != null) {
+                        var data = res.data;
+                        var img = "/Content/" + data.image_w;
+                        $(".ulDetail").html("");
+                        //alert(img);
+                        $(".img_image_w").attr('src', img)
+                        $(".bname").text(data.bname);
+                        html += "<li>商品编号：" + data.bid + "</li>" +
+                            "<li> 售价：<span class='price_n'>&yen;" + data.currPrice + "</span></li >" +
+                            "<li>原价：<span class='spanPrice'>&yen;" + data.price + "</span>&nbsp;&nbsp;折扣：<span style='color: #c30;'>" + data.discount + "</span>折</li>" +
+                            "<li><table><tr><td colspan='3'>作者：" + data.author + " 著</td></tr>" +
+                            "<tr><td colspan='3'>出版社：" + data.press + "</td></tr>" +
+                            "<tr><td colspan='3'>出版时间：" + data.publishtime + "</td></tr>" +
+                            "<tr><td>版次：1</td><td>页数：" + data.pageNum + "</td><td>字数" + data.wordNum + "</td></tr>" +
+                            "<tr><td width='180'>印刷时间：" + data.printtime + "</td><td>开本：" + data.booksize + " 开</td><td>纸张：" + data.paper + "</td></tr>" +
+                            "</table ></li > ";
+                    }
+                    //console.log(html);
+                    $(".ulDetail").html(html);
+                }
+            },
+            error: function () {
+                alert("error");
+            }
+        })
+    });
+    function getUrlPara(paraName) {
+        var sUrl = location.href;
+        var sReg = "(?:\\?|&){1}" + paraName + "=([^&]*)"
+        var re = new RegExp(sReg, "gi");
+        re.exec(sUrl);
+        return RegExp.$1;
+    }
+    function goBuy() {
+        var bid = getUrlPara("bid");
+        var amount = $("#cnt").val();
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            $.ajax({
+                url: '/User/islogin',
+                type: 'POST',
+                async: false,
+                success: function (res) {
+                    //console.log(res);
+                    if (res.code == '200') {
+                        location.href = '/Cart/Cart?bid=' + bid + '&amount=' + amount;
+                } else if (res.code == '100') {
+                        layer.msg(res.msg, { icon: 5, time: 3000 }, function () {
+                            location.href = '/User/Login';
+                        });
+
+                    }
+                }
+            });
+        })
+    }
+</script>
+
+

@@ -1,0 +1,210 @@
+﻿
+@{
+    ViewBag.Title = "CategoryManage";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Content/CSS/Manager/Category/list.css" rel="stylesheet" />
+<style>
+    td a {
+        color: red;
+    }
+</style>
+<div id="userList" class="layui-box">
+    <h2 style="text-align: center;">分类列表</h2>
+    <table align="center" border="1" cellpadding="0" cellspacing="0" id="categoryTable">
+        <tr class="trTitle">
+            <th>分类名称</th>
+            <th>描述</th>
+            <th>操作</th>
+        </tr>
+
+    </table>
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script>
+    $(function () {
+        $("#BookManage").addClass('layui-nav-itemed');
+        $("#CatagoryManage").addClass('layui-this');
+        $.ajax({
+            url: '/Category/CategoryFirst',
+            type: 'POST',
+            async: false,
+            success: function (res) {
+                //console.log(res);
+                if (res.code == '200') {
+                    //console.log(res.data);
+                    var data = res.data;
+                    var html = "";
+                    for (var i = 0; i < data.length; i++) {//一级分类
+                        html += "<tr class='trOneLevel'><td style= 'width:200px;' >" + data[i].cname + "</td><td>" + data[i].desc + "</td><td style= 'width:200px;'>" +
+                            "<a href='javascript:addLayer();'>添加一级分类</a>&nbsp;<a href='javascript:editLayer(\"" + data[i].cid + "\");'>修改</a>&nbsp;<a  href='/Manager/deleteCategory?cid=" + data[i].cid +"'>删除</a></td></tr> ";
+
+                        var pid = data[i].cid;
+                        $.ajax({
+                            url: '/Category/CategorySecond',
+                            type: 'POST',
+                            async: false,
+                            data: { 'pid': pid },
+                            success: function (result) {
+                                if (result.code == '200') {
+                                    var datas = result.data;
+                                    for (var j = 0; j < datas.length; j++) {//二级分类
+                                        html += "<tr class='trTwoLevel'><td style= 'width:200px;'>" + datas[j].cname + "</td ><td>" + datas[j].desc + "</td><td style = 'width:200px;' align='right'>" +
+                                            "<a href='javascript:addLayer2();'>添加二级分类</a>&nbsp;<a href='javascript:editLayer2(\"" + datas[j].cid + "\");'>修改</a>&nbsp;<a href='/Manager/deleteCategory?cid" + datas[j].cid+"'>删除</a></td></tr >";
+                                    }
+                                }
+                            }
+                        })
+                    }
+                    $("#categoryTable").append(html);
+                }
+            }
+        });
+    })
+    //添加一级分类弹框
+    function addLayer() {
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                type: 1,
+                title:'添加一级分类',
+                content: $('#divAdd')
+            });
+        })
+    }
+    //添加一级分类输入框校验
+    function checkForm() {
+        if (!$("#cname").val()) {
+            alert("分类名不能为空！");
+            return false;
+        }
+        if (!$("#desc").val()) {
+            alert("分类描述不能为空！");
+            return false;
+        }
+        return true;
+    }
+
+    //添加二级分类弹框
+    function addLayer2() {
+        //获取到所有一级分类追加到下拉框
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            $.ajax({
+                url: '/Category/CategoryFirst',
+                type: 'POST',
+                async: false,
+                success: function (res) {
+                    //console.log(res);
+                    if (res.code == '200') {
+                        //console.log(res.data);
+                        var data = res.data;
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {//一级分类
+                            html += "<option value='" + data[i].cid + "'>" + data[i].cname + "</option>";
+                        }
+                        $("#pid1").append(html);
+                    }
+                }
+            });
+            layer.open({
+                type: 1,
+                title: '添加二级分类',
+                content: $('#divAdd2')
+            });
+        })
+    }
+    //添加二级分类输入框校验
+    function checkForm2() {
+        if (!$("#cname1").val()) {
+            alert("分类名不能为空！");
+            return false;
+        }
+        if (!$("#pid1").val()) {
+            alert("一级分类不能为空！");
+            return false;
+        }
+        if (!$("#desc1").val()) {
+            alert("分类描述不能为空！");
+            return false;
+        }
+        return true;
+    }
+
+    //修改一级分类弹框
+    function editLayer(cid) {
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            $("#cidEdit").val(cid);
+            layer.open({
+                type: 1,
+                title: '修改一级分类',
+                content: $('#divEdit')
+            });
+        })
+    }
+    //修改一级分类输入框校验
+    function checkFormEdit() {
+        if (!$("#cnameEdit").val()) {
+            alert("分类名不能为空！");
+            return false;
+        }
+        if (!$("#descEdit").val()) {
+            alert("分类描述不能为空！");
+            return false;
+        }
+        return true;
+    }
+
+    //修改二级分类弹框
+    function editLayer2(cid) {
+        //获取到所有一级分类追加到下拉框
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            $("#cidEdit2").val(cid);
+            $.ajax({
+                url: '/Category/CategoryFirst',
+                type: 'POST',
+                async: false,
+                success: function (res) {
+                    //console.log(res);
+                    if (res.code == '200') {
+                        //console.log(res.data);
+                        var data = res.data;
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {//一级分类
+                            html += "<option value='" + data[i].cid + "'>" + data[i].cname + "</option>";
+                        }
+                        $("#pidEdit2").append(html);
+                    }
+                }
+            });
+            layer.open({
+                type: 1,
+                title: '修改二级分类',
+                content: $('#divEdit2')
+            });
+        })
+    }
+    //添加二级分类输入框校验
+    function checkFormEdit2() {
+        if (!$("#cnameEdit2").val()) {
+            alert("分类名不能为空！");
+            return false;
+        }
+        if (!$("#pidEdit2").val()) {
+            alert("一级分类不能为空！");
+            return false;
+        }
+        if (!$("#descEdit2").val()) {
+            alert("分类描述不能为空！");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+
+

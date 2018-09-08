@@ -1,0 +1,678 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 12px;
+    color: #666;
+}
+a:link, a:visited {
+    color: #333;
+    text-decoration: none;
+}
+img {
+    border: 0;
+    display: inline-block;
+}
+a:hover, a:active {
+    color: #c60;
+    text-decoration: underline;
+}
+/*顶部信息*/
+#site-nav-bg {
+    height: 32px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: url(../images/site-nav-bg.gif) repeat-x;
+}
+.f-Price {
+    color: #E10202;
+    font-weight: bold;
+}
+a.f-cart:link, a.f-cart:visited {
+    COLOR: #793F0F;
+    text-decoration: none;
+}
+.fore1 {
+    float: left;
+    width: 110px;
+    height: 32px;
+    padding-left: 32px;
+    font-size: 12px;
+}
+/*主体区域*/
+#panel {
+    margin-left: auto;
+    margin-right: auto;
+    width: 980px;
+}
+
+.loge {
+    width: 200px;
+    height: 60px;
+    /*float: right;*/
+    /*overflow: hidden;*/
+    /*padding-top: 15px;*/
+}
+.bg-wrapper {
+    width: 980px;
+    height: 75px;
+}
+.bannerA-768 {
+    width: 768px;
+    height: 35px;
+    float: right;
+    text-align: right;
+    overflow: hidden;
+    padding: 2px 0;
+}
+.menu-box {
+    width: 776px;
+    height: 30px;
+    float: right;
+    background: url(../images/menu-bj.gif) no-repeat;
+}
+.menu-Zhu {
+    width: 450px;
+    height: 30px;
+    float: left;
+    overflow: hidden;
+}
+    .menu-Zhu li {
+        width: 50px;
+        height: 30px;
+        float: left;
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        line-height: 35px;
+        color: #fff;
+        padding-right: 1px;
+        background: url(../images/GongTU-A.gif) no-repeat -609px -259px;
+    }
+#site-nav {
+    width: 980px;
+    height: 26px;
+    position: relative;
+    margin: auto;
+    z-index: 1000;
+}
+
+.top-dengru {
+    width: 400px;
+    height: 32px;
+    line-height: 32px;
+    float: left;
+}
+
+.top-dengru li {
+    display: inline-block;
+    width: auto;
+    height: 32px;
+    float: left;
+    margin-right: 8px;
+}
+a.f-cheng:link, a.f-cheng:visited {
+    COLOR: #e95809;
+    text-decoration: none;
+}
+.f-hui-line {
+    color: #b1b1b1;
+}
+.quick-link {
+    width: 520px;
+    height: 32px;
+    float: right;
+    line-height: 32px;
+}
+.quick-link li {
+    height: 32px;
+    float: right;
+    color: #ec871f;
+    /*background: url(../images/GongTU-A.gif) no-repeat -516px -222px;*/
+    padding: 0 8px;
+}
+/*搜索框一栏*/
+.menu-second {
+    width: 980px;
+    height: 33px;
+    font-size: 14px;
+    color: #fff;
+    float: left;
+    background: url(../images/dh-bj.jpg) no-repeat;
+    padding-top: 3px;
+}
+.allsort {
+    width: 202px;
+    height: 32px;
+    position: relative;
+    float: left;
+    z-index: 200;
+}
+.Jtab-newhead {
+    display: block;
+}
+.search-panel {
+    height: 24px;
+    float: left;
+    margin-top: 3px;
+    margin-left: 17px;
+    _margin-left: 11px;
+}
+.mycart-box {
+    width: 215px;
+    height: 32px;
+    float: right;
+    position: relative;
+    z-index: 2800;
+}
+.mt {
+    width: 188px;
+    height: 32px;
+    background: url(../images/GongTU-A.gif) no-repeat -147px -89px;
+    line-height: 32px;
+    padding-left: 10px;
+    margin-left: 3px;
+    color: #582e04;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.mt dt {
+    display: inline-block;
+    float: left;
+}
+.mt dd {
+    display: inline-block;
+    float: right;
+}
+.extra {
+    width: 22px;
+    height: 22px;
+    background: url(../images/GongTU-A.gif) no-repeat -349px -89px;
+    padding-left: 10px;
+}
+
+form {
+    clear: left;
+    margin: 0;
+}
+.search-panel li {
+    float: left;
+    display: inline-block;
+}
+.search-textA {
+    height: 24px;
+    width: 230px;
+    font-size: 14px;
+    line-height: 22px;
+    border: 0;
+    background: 0;
+    padding-left: 8px;
+    color: #ccc;
+    background: #FFF url(../images/search-bj.gif) repeat-x;
+}
+#btn-search {
+    width: 80px;
+    height: 24px;
+    background: url(../images/searchA.gif);
+    cursor: pointer;
+    color: #fff;
+    font-weight: bold;
+    border: 0;
+}
+a.f-bai:link, a.f-bai:visited {
+    color: #fff;
+    TEXT-DECORATION: none;
+}
+#mycart {
+    width: 215px;
+    height: 32px;
+    background: url(../images/GongTU-A.gif) no-repeat -432px -89px;
+    float: right;
+    line-height: 32px;
+}
+.fore1 {
+    float: left;
+    width: 110px;
+    height: 32px;
+    padding-left: 32px;
+    font-size: 12px;
+}
+.fore2 {
+    float: left;
+    width: 60px;
+    text-align: center;
+    line-height: 30px;
+}
+.index-gouwu-box {
+    width: 339px;
+    border: 3px solid #ff8b02;
+    padding: 10px;
+    padding-top: 0;
+    background: #fff;
+    position: absolute;
+    top: 30px;
+    left: -150px;
+    z-index: 3000;
+    font-size: 12px;
+    color: #000;
+    display: none;
+    line-height: 20px;
+}
+/*左侧菜单*/
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* mod-menu */
+.mold_open_hover, .mold_open {
+    display: inline-block;
+    width: 10px;
+    height: 6px;
+    margin-left: 10px;
+    position: relative;
+    top: -2px;
+}
+
+.mold_open {
+    background-position: 0 -6px;
+}
+
+.mold_open_hover {
+    background-position: 0 0;
+}
+
+.mod-menu {
+    position: relative;
+    z-index: 1000;
+    left: -1px;
+    background: #fff;
+    /*margin-left: 100px;*/
+    border-left: solid 2px #FF8A00;
+    border-radius: 5px;
+}
+
+.menu-cont-list a:hover {
+    text-decoration: underline;
+    color: #b36b17;
+}
+
+.mod-menu .menu-item {
+    width: 200px;
+    border-top: solid 2px #FF8A00;
+    border-bottom: solid 2px #FF8A00;
+    border-right: solid 1px #FF8A00;
+    position: relative;
+    z-index: 22;
+}
+
+    .mod-menu .menu-item li {
+        height: 43px;
+        line-height: 43px;
+        /*background: #feebf3;*/
+        /*border-top: solid 1px #f0bfd3;*/
+    }
+
+        .mod-menu .menu-item li.mouse-bg {
+            background: #fff;
+            position: relative;
+            z-index: 22;
+            margin-right: -4px;
+        }
+
+    .mod-menu .menu-item a {
+        font-size: 13px;
+        padding-left: 33px;
+        display: block;
+        height: 45px;
+        border-top: solid 1px #f1f2f7;
+        color: #b36b17;
+    }
+
+        .mod-menu .menu-item a:hover {
+            text-decoration: none;
+        }
+
+.mod-menu .menu-cont {
+    position: absolute;
+    left: 200px;
+    top: 1px;
+    background: #fff;
+    width: 430px;
+    border: solid 1px #FF8A00;
+    box-shadow: 1px 0 10px rgba(210,33,103,0.25);
+    z-index: 20;
+}
+
+.mod-menu .menu-cont-list {
+    padding: 0 30px;
+}
+
+    .mod-menu .menu-cont-list li {
+        border-bottom: dotted 1px #f0bfd3;
+        padding: 10px 0;
+    }
+
+        .mod-menu .menu-cont-list li:last-child {
+            border-bottom: none;
+        }
+
+    .mod-menu .menu-cont-list h3 {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+        .mod-menu .menu-cont-list h3 a {
+            color: #222;
+        }
+
+.mod-menu .menu-list-link a {
+    color: #666;
+    line-height: 24px;
+}
+
+.mod-menu .menu-list-link .long-string {
+    color: #ccc;
+    font-size: 12px;
+    padding: 0 10px;
+}
+/*轮播图*/
+.banner-TV {
+    height: 215px;
+    overflow: hidden;
+    float:right;
+    margin-top:10px;
+    margin-right:10px;
+}
+.banner-more {
+    width: 568px;
+    float: right;
+    margin-bottom: 20px;
+    margin-top:8px;
+}
+.banner-more-list {
+    width: 537px;
+    float: left;
+    margin: 0 10px;
+}
+.banner-more-list li {
+    padding-left:4px;
+    float:left;
+}
+a.banner-more-l:link, a.banner-more-l:visited {
+    background: url(../images/GongTU-A.gif) no-repeat -303px -505px;
+}
+a.banner-more-r:link, a.banner-more-r:visited {
+    background: url(../images/GongTU-A.gif) no-repeat -336px -505px;
+}
+/*新闻公告*/
+.W190 {
+    width: 188px;
+    border: 1px solid #dbdbdb;
+    float: right;
+    margin-bottom: 10px;
+}
+.title190-A {
+    width: 178px;
+    height: 32px;
+    line-height: 32px;
+    background: url(../images/GongTU-A.gif) no-repeat -218px -462px;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+.list190-textF {
+    width: 188px;
+    float: left;
+    line-height: 20px;
+    font-size: 12px;
+}
+.list190-textF li {
+    width: 160px;
+    line-height: 20x;
+    padding-left: 22px;
+    background: url(../images/index-tit.gif) no-repeat -516px -0px;
+}
+.banner170 {
+    width: 170px;
+    padding-left: 5px;
+    float: left;
+}/*热销新品*/
+.W568-XinPinReXia {
+    width: 566px;
+    height: 220px;
+    float: right;
+    background: url(../images/bj-XinPinReXiao.gif) no-repeat;
+    margin-right: 10px;
+}
+.Munber-XinPinReXia {
+    width: 452px;
+    height: 25px;
+    float: left;
+    padding-top: 14px;
+    font-size: 14px;
+    padding-left: 118px;
+}
+    .Munber-XinPinReXia .current {
+        width: 62px;
+        height: 23px;
+        line-height: 24px;
+        float: left;
+        color: #88704e;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        font-weight: bold;
+        background: url(../images/index-tit.gif) no-repeat -250px -967px;
+    }
+    .Munber-XinPinReXia li {
+        width: 62px;
+        height: 23px;
+        line-height: 24px;
+        float: left;
+        color: #848484;
+        display: inline-block;
+        text-align: center;
+        background: url(../images/index-tit.gif) no-repeat -313px -967px;
+    }
+.XinPRX-box {
+    width: 546px;
+    padding: 5px 14px;
+    float: left;
+}
+.W95-list {
+    width: 95px;
+    float: left;
+    padding: 0 3px;
+    padding-bottom: 8px;
+    margin-right: 7px;
+}
+.W95-list dd {
+    width: 85px;
+    padding: 4px;
+    height: 100px;
+    overflow: hidden;
+    margin-left: 0px;
+}
+.img85 {
+    width: 85px;
+    height: 100px;
+    overflow: hidden;
+}
+.img85 img {
+    margin-left: -8px;
+    width: 100px;
+}
+.W95-list dt {
+    width: 90px;
+    height: 36px;
+    line-height: 18px;
+    overflow: hidden;
+    margin-top: 2px;
+    background: #e7e7e7;
+    padding-left: 5px;
+}
+/*促销看板*/
+.W190-BJ {
+    background: #f8f8f8;
+    float:left;
+    margin-top:10px;
+}
+.title190-A {
+    width: 178px;
+    height: 32px;
+    line-height: 32px;
+    background: url(../images/GongTU-A.gif) no-repeat -218px -462px;
+    float: left;
+    font-size: 14px;
+    font-weight: bold;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    color: #000;
+}
+.CXimgA130-200 {
+    width: 188px;
+    height: 210px;
+    padding-bottom: 10px;
+    text-align: center;
+    float: left;
+    position: relative;
+}
+.CXimgA130-200 a {
+    display: table-cell;
+    height: 200px;
+    outline: medium none;
+    text-align: center;
+    vertical-align: middle;
+    width: 188px;
+}
+.Munber {
+    width: 170px;
+    height: 18px;
+    padding-left: 18px;
+    padding-bottom: 10px;
+    float: left;
+}
+.Munber li {
+    width: 11px;
+    height: 16px;
+    line-height: 16px;
+    background: #ededed;
+    border: 1px solid #dbdbdb;
+    float: left;
+    color: #646464;
+    display: inline-block;
+    text-align: center;
+    margin-right: 4px;
+    _margin-right: 2px;
+    font-family: tahoma,Arial,Helvetica,sans-serif;
+}
+.Munber .current {
+    width: 11px;
+    height: 16px;
+    background: #cd0104;
+    border: 1px solid #f3c5a4;
+    float: left;
+    color: #fff;
+    display: inline-block;
+    cursor: pointer;
+}
+/*二维码*/
+#index-right {
+    width: 190px;
+    float: right;
+}
+.banner190 {
+    width: 190px;
+    float: left;
+    min-height: 1px;
+    line-height: 1px;
+}
+.banner190 a {
+    margin-bottom: 8px;
+    display: inline-block;
+}
+/*底部*/
+#footer {
+    margin-top: 0;
+}
+
+.w980 {
+    width: 980px;
+    clear: both;
+    margin-left: auto;
+    margin-right: auto;
+}
+.serve-box {
+    width: 960px;
+    padding: 9px;
+    border: 1px solid #e2e2e2;
+    float: left;
+    text-align: left;
+}
+.serve-box dl {
+    width: 140px;
+    height: 150px;
+    padding: 0 10px;
+    border-right: 1px solid #e2e2e2;
+    float: left;
+}
+.serve-box dt {
+    width: 140px;
+    height: 28px;
+}
+    .serve-box dd {
+        width: 126px;
+        line-height: 1em;
+        padding: 8px 0;
+        padding-left: 14px;
+        border-bottom: 1px solid #e2e2e2;
+        background: url(../images/GongTU-A.gif) no-repeat -186px -60px;
+    }
+.serve-box2 {
+    width: 960px;
+    padding: 9px;
+    border: 1px solid #e2e2e2;
+    float: left;
+    margin-top: 10px;
+    border-bottom: 0;
+}
+.add {
+    width: 960px;
+    float: left;
+
+}
+.add li {
+    width: 960px;
+    line-height: 1.5em;
+    text-align: center;
+    color: #686868;
+}
+.add a:link, .add a:visited {
+    color: #686868;
+    TEXT-DECORATION: none;
+}
+.certificate {
+    width: 940px;
+    padding-left: 20px;
+}
+.certificate li {
+    float: left;
+}
+map {
+    display: inline;
+}
+area {
+    display: inline;
+    cursor: pointer;
+}

@@ -1,0 +1,95 @@
+﻿@model MMBookStore.Models.Entity.Error
+@{
+    ViewBag.Title = "新用户注册";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<link type="text/css" href="../Content/CSS/User/Regist.css" rel="stylesheet" />
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<div id="divMain">
+    <div id="divTitle">
+        <span id="spanTitle">新用户注册</span>
+    </div>
+    <div id="divBody">
+        <form method="post" id="registForm" action="/User/registForm">
+            <table id="tableForm">
+                <tr>
+                    <td class="tdText">用户名：</td>
+                    <td class="tdInput">
+                        <input class="inputClass" type="text" name="loginname" id="loginname" />
+                    </td>
+                    <td class="tdError">
+                        <label class="errorClass" id="loginnameError">@Html.DisplayFor(model => model.loginnameError)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdText">登录密码：</td>
+                    <td>
+                        <input class="inputClass" type="password" name="loginpass" id="loginpass" />
+                    </td>
+                    <td>
+                        <label class="errorClass" id="loginpassError">@Html.DisplayFor(model => model.loginpassError)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdText">确认密码：</td>
+                    <td>
+                        <input class="inputClass" type="password" name="reloginpass" id="reloginpass" />
+                    </td>
+                    <td>
+                        <label class="errorClass" id="reloginpassError">@Html.DisplayFor(model => model.reloginpassError)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdText">Email：</td>
+                    <td>
+                        <input class="inputClass" type="text" name="email" id="email" />
+                    </td>
+                    <td>
+                        <label class="errorClass" id="emailError">@Html.DisplayFor(model => model.emailError)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdText">Email激活码：</td>
+                    <td>
+                        <input class="inputClass" type="text" name="emailCode" id="emailCode" />
+                    </td>
+                    <td>
+                        <button type="button" class="layui-btn btnsendEmail" id="btnsendEmail" onclick="javascript:_jhm()" value="获取激活码">获取激活码</button>
+                        <label class="errorClass" id="emailCodeError">@Html.DisplayFor(model => model.emailCodeError)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdText">验证码：</td>
+                    <td>
+                        <input class="inputClass" type="text" name="verifyCode" id="verifyCode" />
+                    </td>
+                    <td>
+                        <label class="errorClass" id="verifyCodeError">@Html.DisplayFor(model => model.verifyError)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div id="divVerifyCode"><img id="imgVerifyCode" src="/User/GetSecurityCode" /></div>
+                    </td>
+                    <td>
+                        <label><a href="javascript:_hyz()">换一张</a></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="image" src="~/Content/images/regist1.jpg" name="submit" id="submitBtn" style="margin-top: 20px;"/>
+                    </td>
+                    <td>
+                        <label></label>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="~/Scripts/User/Regist.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+

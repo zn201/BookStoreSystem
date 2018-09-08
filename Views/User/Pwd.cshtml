@@ -1,0 +1,85 @@
+﻿@model MMBookStore.Models.Entity.Error
+@{
+    ViewBag.Title = "Pwd";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<link type="text/css" href="../Content/CSS/User/Pwd.css" rel="stylesheet" />
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+
+
+<div id="divMain">
+    <div id="divTitle">
+        <span id="spanTitle">修改密码</span>
+    </div>
+    <div id="divBody">
+        <form method="post" action="/User/PwdForm" target="_top" class="layui-form">
+            <div class="layui-form-item" style="padding-top:20px">
+                <label class="layui-form-label" style="width: 100px;">
+                    新密码:
+                </label>
+                <div class="layui-input-inline">
+                    <input class="input layui-input" type="password" name="newpass" id="newpass" />
+
+                </div>
+                <label id="newpassError" class="layui-form-text error">@Html.DisplayFor(model => model.loginpassError)</label>
+            </div>
+            <div class="layui-form-item" style="margin-top:20px">
+                <label class="layui-form-label" style="width: 100px;">
+                    确认密码:
+                </label>
+                <div class="layui-input-inline">
+                    <input class="input layui-input" type="password" name="reloginpass" id="reloginpass" />
+
+                </div>
+                <label id="reloginpassError" class="layui-form-text error">@Html.DisplayFor(model => model.reloginpassError)</label>
+            </div>
+            <div class="layui-form-item" style="margin-top:20px">
+                <label class="layui-form-label" style="width: 100px;">
+                    注册的Email:
+                </label>
+                <div class="layui-input-inline">
+                    <input class="input layui-input" type="text" name="email" id="email" />
+
+                </div>
+                <label id="emailError" class="layui-form-text error">@Html.DisplayFor(model => model.emailError)</label>
+            </div>
+            <div class="layui-form-item" style="margin-top:20px">
+                <label class="layui-form-label" style="width: 100px;">
+                    Email激活码:
+                </label>
+                <div class="layui-input-inline">
+                    <input class="input layui-input" type="text" name="emailCode" id="emailCode" />
+
+                </div>
+                <button type="button" class="btnsendEmail layui-btn" id="btnsendEmail" onclick="javascript:_jhm()" value="获取激活码">获取激活码</button>
+                <label id="emailCodeError" class="layui-form-text error">@Html.DisplayFor(model => model.emailCodeError)</label>
+            </div>
+            <div class="layui-form-item" style="margin-top:20px">
+                <label class="layui-form-label" style="width: 100px;"> </label>
+                <div class="layui-input-inline">
+                    <img id="vCode" src="/User/GetSecurityCode" />
+
+                </div>
+                <a href="javascript:_hyz();">看不清，换一张</a>
+            </div>
+            <div class="layui-form-item" style="margin-top:20px">
+                <label class="layui-form-label" style="width: 100px;">
+                    验证码:
+                </label>
+                <div class="layui-input-inline">
+                    <input class="input layui-input" type="password" name="verifyCode" id="verifyCode" />
+
+                </div>
+                <label id="verifyCodeError" class="layui-form-text error">@Html.DisplayFor(model => model.verifyError)</label>
+            </div>
+            <div class="layui-form-item" style="margin-top:20px">
+                <label class="layui-form-label" style="width: 100px;"> </label>
+                <button type="submit" id="submitBtn" class="layui-btn">确认修改</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="~/Scripts/User/Pwd.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+

@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "BookList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/CSS/Book/bookList.css" rel="stylesheet" />
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+
+<div id="panel-right">
+    <div class="W568 title-index-books">
+        <div class="title-index-box">
+            <h3>
+                搜索结果如下:
+            </h3>
+        </div>
+        <div>
+            <ul class="booklist">
+                <li>
+                    <div class="inner">
+                        <a class="pic" href=""><img src="~/Content/book_img/23254532-1_b.jpg" border="0" /></a>
+                        <p class="price">
+                            <span class="price_n">&yen;40.7</span>
+                            <span class="price_r">&yen;50.9</span>
+                            (<span class="price_s">6.9折</span>)
+                        </p>
+                        <p><a id="bookname" title="Spring实战(第3版)（In Action系列中最畅销的Spring图书，近十万读者学习Spring的共同选择）" href="<c:url value='/jsps/book/desc.jsp'/>">Spring实战(第3版)（In Action系列中最畅销的Spring图书，近十万读者学习Spring的共同选择）</a></p>
+                        <p><a href="" name='P_zz' title='Craig Walls'>Craig Walls</a></p>
+                        <p class="publishing">
+                            <span>出 版 社：</span><a href="">人民邮电出版社</a>
+                        </p>
+                        <p class="publishing_time"><span>出版时间：</span>2013-06-01</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="inner">
+                        <a class="pic" href=""><img src="~/Content/book_img/23254532-1_b.jpg" border="0" /></a>
+                        <p class="price">
+                            <span class="price_n">&yen;40.7</span>
+                            <span class="price_r">&yen;50.9</span>
+                            (<span class="price_s">6.9折</span>)
+                        </p>
+                        <p><a id="bookname" title="Spring实战(第3版)（In Action系列中最畅销的Spring图书，近十万读者学习Spring的共同选择）" href="<c:url value='/jsps/book/desc.jsp'/>">Spring实战(第3版)（In Action系列中最畅销的Spring图书，近十万读者学习Spring的共同选择）</a></p>
+                        <p><a href="" name='P_zz' title='Craig Walls'>Craig Walls</a></p>
+                        <p class="publishing">
+                            <span>出 版 社：</span><a href="">人民邮电出版社</a>
+                        </p>
+                        <p class="publishing_time"><span>出版时间：</span>2013-06-01</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="inner">
+                        <a class="pic" href=""><img src="~/Content/book_img/23254532-1_b.jpg" border="0" /></a>
+                        <p class="price">
+                            <span class="price_n">&yen;40.7</span>
+                            <span class="price_r">&yen;50.9</span>
+                            (<span class="price_s">6.9折</span>)
+                        </p>
+                        <p><a id="bookname" title="Spring实战(第3版)（In Action系列中最畅销的Spring图书，近十万读者学习Spring的共同选择）" href="<c:url value='/jsps/book/desc.jsp'/>">Spring实战(第3版)（In Action系列中最畅销的Spring图书，近十万读者学习Spring的共同选择）</a></p>
+                        <p><a href="" name='P_zz' title='Craig Walls'>Craig Walls</a></p>
+                        <p class="publishing">
+                            <span>出 版 社：</span><a href="">人民邮电出版社</a>
+                        </p>
+                        <p class="publishing_time"><span>出版时间：</span>2013-06-01</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="page" style="margin: 0 auto;"></div>
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script>
+    $(function () {
+        var question = getUrlPara("q");
+        //alert(question);
+        var url = '/Book/getBookList';
+        //var data = '{"cid":"' + d + '","pageItem":1,"limit":6}';//"'cid':'" + d + "', 'pageItem': '1', 'limit': '5' ";//'{name:"jack"}';
+        //var json = JSON.parse(data)
+        var count = ajaxGetBookList(url, question, 1, 6);
+
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'page' //注意，这里是 ID，不用加 # 号
+                , count: count //数据总数，从服务端得到
+                , theme: '#FF5722'
+                , limit: 6
+                , groups: 3
+                , limits: [6, 30, 60]
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                , jump: function (obj, first) {
+                    //console.log(obj)
+                    if (!first) {//首次不执行
+                        ajaxGetBookList(url, question, obj.curr, obj.limit);
+                    }
+                }
+            });
+        });
+    });
+
+    function getUrlPara(paraName) {
+        var sUrl = location.href;
+        var sReg = "(?:\\?|&){1}" + paraName + "=([^&]*)"
+        var re = new RegExp(sReg, "gi");
+        re.exec(sUrl);
+        return RegExp.$1;
+    }
+
+    function ajaxGetBookList(url, data, pageItem,limit) {
+        var datas = '{"question":"' + data + '","pageItem":' + pageItem + ',"limit":' + limit+'}';//"'cid':'" + d + "', 'pageItem': '1', 'limit': '5' ";//'{name:"jack"}';
+        var json = JSON.parse(datas);
+        var count = 0;
+        $.ajax({
+            url: url,
+            data: json,
+            async: false,
+            type: 'POST',
+            success: function (res) {
+                //console.log(res.data);
+                if (res.code == '200') {
+                    var data = res.data;
+                    count = data.TotalItems;
+                    if (data.Items.length > 0) {
+                        $(".booklist").html('');
+                        var item = data.Items;
+                        var html = '';
+                        for (var i = 0; i < item.length; i++) {
+                            html += "<li><div class='inner'><a class='pic' href=''><img src='/Content/" + item[i].image_b + "' border='0'/></a>" +
+                                " <p class='price'>" +
+                                "<span class='price_n'>&yen;" + item[i].currPrice + "</span>" +
+                                "<span class='price_r'>&yen;" + item[i].price + "</span>" +
+                                "(<span class='price_s'>" + item[i].discount + "折</span>)</p>" +
+                                "<p><a id='bookname' title='" + item[i].bname + " 'href=''>" + item[i].bname + "</a></p>" +
+                                "<p><a href='' name='P_zz' title='" + item[i].author + " '>" + item[i].author + "</a></p>" +
+                                "<p class='publishing'><span>出 版 社：</span><a href=''>" + item[i].press + "</a></p>" +
+                                "<p class='publishing_time'><span>出版时间：</span>" + item[i].publishtime + "</p></div></li >";
+                        }
+                        $(".booklist").append(html);
+                    }
+                }
+            }
+        })
+        return count;
+    }
+
+</script>
+

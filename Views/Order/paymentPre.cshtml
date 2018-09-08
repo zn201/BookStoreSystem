@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "paymentPre";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Content/CSS/Order/desc.css" rel="stylesheet" />
+
+<div class="divOrder">
+    <div hidden>
+        <input class="oidHidden" type="text" name="name" value="@ViewBag.OrderInfo.oid" hidden />
+        <input class="statusHidden" type="text" name="name" value="@ViewBag.OrderInfo.status" hidden />
+    </div>
+    <span>
+        订单号：@ViewBag.OrderInfo.oid
+        @switch (ViewBag.OrderInfo.status)
+        {
+            case "1":
+                <b>(等待付款)</b>
+                break;
+            case "2":
+                <b>(准备发货)</b>
+                break;
+            case "3":
+                <b>(等待确认)</b>
+                break;
+            case "4":
+                <b>(交易成功)</b>
+                break;
+            case "5":
+                <b>(已取消)</b>
+                break;
+        }
+        下单时间：@ViewBag.OrderInfo.ordertime
+    </span>
+</div>
+<div class="divContent">
+    <div class="div2">
+        <dl>
+            <dt>收货人信息</dt>
+            <dd>@ViewBag.OrderInfo.name</dd>
+            <dd>@ViewBag.OrderInfo.phone</dd>
+            <dd>@ViewBag.OrderInfo.address</dd>
+        </dl>
+    </div>
+    <div class="div2">
+        <dl>
+            <dt>商品清单</dt>
+            <dd>
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th class="tt">商品名称</th>
+                        <th class="tt" align="left">单价</th>
+                        <th class="tt" align="left">数量</th>
+                        <th class="tt" align="left">小计</th>
+                    </tr>
+
+                    @foreach (var item in ViewBag.OrderitemInfo)
+                    {
+                        <tr style="padding-top: 20px; padding-bottom: 20px;">
+                            <td class="td" width="400px">
+                                <div class="bookname">
+                                    <img align="middle" width="70" src="~/Content/@item.image_b" />
+                                    <a href="/Book/BookDetail?bid=@item.bid">@item.bname </a>
+                                </div>
+                            </td>
+                            <td class="td">
+                                <span>&yen;@item.currPrice </span>
+                            </td>
+                            <td class="td">
+                                <span>@item.quantity </span>
+                            </td>
+                            <td class="td">
+                                <span>&yen;@item.subtotal </span>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </dd>
+        </dl>
+    </div>
+    <div style="margin: 10px 10px 10px 550px;">
+        <span style="font-weight: 900; font-size: 15px;">合计金额：</span>
+        <span class="price_t">&yen;@ViewBag.OrderInfo.total</span><br />
+        <a href="javascript:updateStatus(2);" class="pay" id="btnPay"></a><br />
+        <a href="javascript:updateStatus(5);" id="btnCancel">取消订单</a><br />
+        <a href="javascript:updateStatus(4);" id="btnConfirm">确认收货</a><br />
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script>
+    var oid;
+    var status;
+    $(function () {
+        oid = $(".oidHidden").val();
+        status = $(".statusHidden").val();
+        //判断订单状态，显示不同的按钮
+        switch (status) {
+            case '1':
+                $("#btnPay").show(); $("#btnCancel").show(); $("#btnConfirm").hide();
+                break;
+            case '2':
+                $("#btnPay").hide(); $("#btnCancel").hide(); $("#btnConfirm").show();
+                break;
+            case '3':
+                $("#btnPay").hide(); $("#btnCancel").hide(); $("#btnConfirm").show();
+                break;
+            case '4':
+                $("#btnPay").hide(); $("#btnCancel").hide(); $("#btnConfirm").hide();
+                break;
+            case '5':
+                $("#btnPay").hide(); $("#btnCancel").hide(); $("#btnConfirm").hide();
+                break;
+            default:
+                $("#btnPay").hide(); $("#btnCancel").hide(); $("#btnConfirm").hide();
+                break;
+        }
+    })
+    function updateStatus(setStatus) {
+        $.ajax({
+            url: '/Order/updateStatus',
+            data: { oid: oid, status: setStatus },
+            type: 'POST',
+            dataType: 'json',
+            async: false,
+            success: function (res) {
+                if (res.code == '200') {
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        switch (setStatus) {
+                            case 2: layer.msg('订单支付成功！', { time: 3000 }, function () {
+                                location.href = '/Order/paymentPre?oid=' + oid;
+                            }); break;
+                            case 5: layer.msg('订单取消成功！', { time: 3000 }, function () {
+                                location.href = '/Order/paymentPre?oid=' + oid;
+                            }); break;
+                            case 4: layer.msg('确认收货成功！', { time: 3000 }, function () {
+                                location.href = '/Order/paymentPre?oid=' + oid;
+                            }); break;
+                        }
+                        
+                    })
+                }
+            }
+        })
+    }
+</script>

@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewBag.Title = "loadCartItems";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<link href="~/Content/CSS/Cart/showitem.css" rel="stylesheet" />
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+
+<form id="form1" action="" method="post">
+    <input type="hidden" name="cartItemIds" value="@ViewBag.cartItemIds" />
+    <input type="hidden" id="loginname" name="loginname" value="" />
+    <input type="hidden" id="totalInput" name="total" value="" />
+    <table width="95%" align="center" cellpadding="0" cellspacing="0">
+        <tr bgcolor="#efeae5">
+            <td width="400px" colspan="5"><span style="font-weight: 900;">生成订单</span></td>
+        </tr>
+        <tr align="center">
+            <td width="10%">&nbsp;</td>
+            <td width="50%">图书名称</td>
+            <td>单价</td>
+            <td>数量</td>
+            <td>小计</td>
+        </tr>
+        @foreach (var item in ViewBag.bookLists)
+        {
+            <tr align="center">
+                <td align="right">
+                    <a class="linkImage" href="/Book/BookDetail?bid=@item.bid"><img border="0" width="54" align="top" src="~/Content/@item.image_b" /></a>
+                </td>
+                <td align="left">
+                    <a href="/Book/BookDetail?bid=@item.bid"><span>@item.bname</span></a>
+                </td>
+                <td>&yen;@item.currPrice</td>
+                <td>@item.quantity</td>
+                <td>
+                    <span class="price_n">&yen;<span class="subtotal">@item.subtotal</span></span>
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <td colspan="6" align="right">
+                <span>总计：</span><span class="price_t">&yen;<span id="total">@ViewBag.total</span></span>
+            </td>
+        </tr>
+    </table>
+    <table width="95%" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+            <td colspan="3" bgcolor="#efeae5"> <span style="font-weight: 900">收货人</span></td>
+            <td colspan="3" bgcolor="#efeae5"><span style="font-weight: 900">联系电话</span></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input id="name" type="text" class="layui-input" style="width:300px;" name="name" value="" maxlength="11" />
+            </td>
+            <td colspan="3">
+                <input id="phone" type="text" class="layui-input" name="phone" value="" maxlength="11" />
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="6" bgcolor="#efeae5"><span style="font-weight: 900">收货地址</span></td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <input id="addr" type="text" class="layui-input" name="address" value="" maxlength="50" />
+            </td>
+        </tr>
+        <tr>
+            <td style="border-top-width: 4px;" colspan="5" align="right">
+                <a id="linkSubmit" href="javascript:submitOrder();">提交订单</a>
+            </td>
+        </tr>
+    </table>
+</form>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script src="~/Scripts/Cart/round.js"></script>
+<script type="text/javascript">
+    //计算合计
+    $(function () {
+        var total = 0;
+        $(".subtotal").each(function () {
+            total += Number($(this).text());
+        });
+        $("#total").text(round(total, 2));
+        $.ajax({
+            url: '/User/islogin',
+            type: 'POST',
+            async: false,
+            success: function (res) {
+                //console.log(res);
+                if (res.code == '200') {
+                    var loginname = res.loginname;
+                    if (loginname == '') {
+                        layui.use('layer', function () {
+                            var layer = layui.layer;
+                            layer.msg('登录超时，请重新登录！', { icon: 5, time: 3000 }, function () {
+                                location.href = '/User/Login';
+                            });
+                        })
+                    } else {
+                        $("#loginname").val(loginname);
+                        $.ajax({
+                            url: '/Cart/findUserByloginname',
+                            type: 'POST',
+                            data: { loginname: loginname },
+                            dataType: 'json',
+                            async: false,
+                            success: function (res) {
+                                if (res.code == '200') {
+                                    if (res.data != null) {
+                                        var d = res.data;
+                                        $("#name").val(d.name);
+                                        $("#phone").val(d.phone);
+                                        $("#addr").val(d.address);
+                                    }
+                                }
+                            }
+                        })
+                    }
+                } else if (res.code == '100') {
+                    $(".loginInfo").hide();
+                    $(".welcome").show();
+                }
+            }
+        });
+        
+        $("#totalInput").val($("#total").text());
+    });
+    function submitOrder() {
+        var name = $("#name").val();
+        var phone = $("#phone").val();
+        var address = $("#addr").val();
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            if (name == '') {
+                layer.msg('收货人不能为空！');
+                return;
+            }
+            if (phone == '') {
+                layer.msg('联系电话不能为空！');
+                return;
+            }
+            if (address == '') {
+                layer.msg('收货地址不能为空！');
+                return;
+            }
+            $.ajax({
+                //几个参数需要注意一下
+                type: "POST",//方法类型
+                dataType: "json",//预期服务器返回的数据类型
+                async: false,
+                url: "/Order/Ordersucc",//url
+                data: $('#form1').serialize(),
+                success: function (result) {
+                    //console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.code == "200") {
+                        //console.log(result.data);
+                        $(":input", "#form1").not(":button", ":reset", "hidden", "submit").val("")
+                        if (result.data != null) {
+                            var order = encode(result.data);
+                            location.href = '/Order/OrdersuccMsg?' + order;
+                        }
+
+                    }
+                },
+                error: function () {
+                    alert("异常！");
+                }
+            });
+        })
+        
+    }
+
+    var encode = function (json) {
+        //if (!$chk(json)) {
+        //    return '';
+        //}
+        var tmps = [];
+        for (var key in json) {
+            tmps.push(key + '=' + json[key]);
+        }
+        return tmps.join('&');
+    }  
+</script>
+

@@ -1,0 +1,384 @@
+﻿
+@{
+    ViewBag.Title = "BookInfoManage";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+<link href="~/Content/CSS/Manager/Book/add.css" rel="stylesheet" />
+<div class="layui-btn-group" style="width:500px;margin:0 auto;display:block;">
+    <button type="button" class="layui-btn" onclick="addBookInfo()">添加图书信息</button>
+    <button type="button" class="layui-btn" onclick="gjSearch()">高级搜索</button>
+</div>
+<div id="userList" class="layui-box">
+    <table id="mytable" lay-filter="tableDel">
+        <script type="text/html" id="bar">
+            @*<a class="layui-btn layui-btn-primary layui-btn-xs " lay-event="add">添加</a>*@
+            @*<a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>*@
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        </script>
+        @*第一列序号*@
+        <script type="text/html" id="indexTpl">
+            {{d.LAY_TABLE_INDEX+1}}
+        </script>
+    </table>
+</div>
+<div id="page" style="margin: 0 auto;width: 80%;"></div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+
+<script>
+    $(function () {
+        $("#BookManage").addClass('layui-nav-itemed');
+        $("#BookInfoManage").addClass('layui-this');
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            var url = '/Manager/ajaxGetAllBook';
+            var count = ajaxGetCategoryFirst(url, 1, 10);
+            //执行一个laypage实例
+            laypage.render({
+                elem: 'page' //注意，这里是 ID，不用加 # 号
+                , count: count //数据总数，从服务端得到
+                , theme: '#FF5722'
+                , groups: 4
+                , limits: [10, 30, 60]
+                , layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                , jump: function (obj, first) {
+                    //console.log(obj)
+                    if (!first) {//首次不执行
+                        ajaxGetCategoryFirst(url, obj.curr, obj.limit);
+                    }
+                }
+            });
+        });
+    })
+
+    //获取图书信息，分页显示
+    function ajaxGetCategoryFirst(url, pageItem, limit) {
+        var datas = '{"pageItem":' + pageItem + ',"limit":' + limit + '}';//"'cid':'" + d + "', 'pageItem': '1', 'limit': '5' ";//'{name:"jack"}';
+        var json = JSON.parse(datas);
+        var count = 0;
+        $.ajax({
+            url: url,
+            data: json,
+            async: false,
+            type: 'POST',
+            success: function (res) {
+                //console.log(res.data);
+                if (res.code == '200') {
+                    var data = res.data;
+                    //console.log(data);
+                    count = data.TotalItems;
+                    if (data.Items.length > 0) {
+                        layui.use('table', function () {
+                            var table = layui.table;
+                            //第一个实例
+                            table.render({
+                                elem: '#mytable'
+                                , page: false //开启分页
+                                , data: data.Items
+                                , minWidth: 100
+                                , cols: [[ //表头
+                                    { title: '序号', templet: '#indexTpl' }
+                                    //{ field: 'bid', title: '图书ID',sort: true,width:200, fixed: 'left', align: 'center' }
+                                    , { field: 'bname', title: '图书名称', width: 200 }
+                                    , { field: 'author', title: '作者', width: 150, align: 'center', sort: true }
+                                    , { field: 'price', title: '原价', width: 70, align: 'center', sort: true }
+                                    , { field: 'currPrice', title: '售价', width: 70, align: 'center', sort: true }
+                                    , { field: 'discount', title: '折扣', width: 70, align: 'center', sort: true }
+                                    , { field: 'press', title: '出版社', width: 130, align: 'center', sort: true }
+                                    , { field: 'publishtime', title: '出版时间', width: 100, align: 'center', sort: true }
+                                    , { field: 'edition', title: '版次', width: 60, align: 'center' }
+                                    , { field: 'pageNum', title: '页数', width: 70, align: 'center' }
+                                    , { field: 'wordNum', title: '字数', width: 100, align: 'center' }
+                                    , { field: 'printtime', title: '打印时间', width: 100, align: 'center', sort: true }
+                                    , { field: 'booksize', title: '规格', width: 60, align: 'center' }
+                                    , { field: 'paper', title: '纸质', width: 80, align: 'center' }
+                                    //, { field: 'cid', title: '分类ID', width: 100, align: 'center' }
+                                    , { field: 'image_w', title: '小图片', width: 100, align: 'center' }
+                                    , { field: 'image_b', title: '大图片', width: 100, align: 'center' }
+                                    , { field: 'orderBy', title: '排序字段', width: 100, align: 'center', sort: true }
+                                    , { fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar' }
+                                ]]
+                            });
+                            //监听工具条
+                            table.on('tool(tableDel)', function (obj) {
+                                var data = obj.data;
+                                if (obj.event === 'del') {
+                                    layer.confirm('确定要删除么？', function (index) {
+                                        obj.del();
+                                        layer.close(index);
+                                    });
+                                }
+                            })
+                        })
+                    }
+                }
+            }
+        })
+        return count;
+    }
+    //高级搜索图书
+    function ajaxGetBookList(url, type, data, pageItem, limit) {
+        var datas = '{"' + type + '":"' + data + '","pageItem":' + pageItem + ',"limit":' + limit + '}';//"'cid':'" + d + "', 'pageItem': '1', 'limit': '5' ";//'{name:"jack"}';
+        var json = JSON.parse(datas);
+        var count = 0;
+        $.ajax({
+            url: url,
+            data: json,
+            async: false,
+            type: 'POST',
+            success: function (res) {
+                //console.log(res.data);
+                if (res.code == '200') {
+                    var data = res.data;
+                    count = data.TotalItems;
+                    if (data.Items.length > 0) {
+                        layui.use('table', function () {
+                            var table = layui.table;
+                            //第一个实例
+                            table.render({
+                                elem: '#mytable'
+                                , page: false //开启分页
+                                , data: data.Items
+                                , minWidth: 100
+                                , cols: [[ //表头
+                                    { title: '序号', templet: '#indexTpl' }
+                                    //{ field: 'bid', title: '图书ID',sort: true,width:200, fixed: 'left', align: 'center' }
+                                    , { field: 'bname', title: '图书名称', width: 200 }
+                                    , { field: 'author', title: '作者', width: 150, align: 'center', sort: true }
+                                    , { field: 'price', title: '原价', width: 70, align: 'center', sort: true }
+                                    , { field: 'currPrice', title: '售价', width: 70, align: 'center', sort: true }
+                                    , { field: 'discount', title: '折扣', width: 70, align: 'center', sort: true }
+                                    , { field: 'press', title: '出版社', width: 130, align: 'center', sort: true }
+                                    , { field: 'publishtime', title: '出版时间', width: 100, align: 'center', sort: true }
+                                    , { field: 'edition', title: '版次', width: 60, align: 'center' }
+                                    , { field: 'pageNum', title: '页数', width: 70, align: 'center' }
+                                    , { field: 'wordNum', title: '字数', width: 100, align: 'center' }
+                                    , { field: 'printtime', title: '打印时间', width: 100, align: 'center', sort: true }
+                                    , { field: 'booksize', title: '规格', width: 60, align: 'center' }
+                                    , { field: 'paper', title: '纸质', width: 80, align: 'center' }
+                                    //, { field: 'cid', title: '分类ID', width: 100, align: 'center' }
+                                    , { field: 'image_w', title: '小图片', width: 100, align: 'center' }
+                                    , { field: 'image_b', title: '大图片', width: 100, align: 'center' }
+                                    , { field: 'orderBy', title: '排序字段', width: 100, align: 'center', sort: true }
+                                    , { fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar' }
+                                ]]
+                            });
+                            //监听工具条
+                            table.on('tool(tableDel)', function (obj) {
+                                var data = obj.data;
+                                if (obj.event === 'del') {
+                                    layer.confirm('确定要删除么？', function (index) {
+                                        obj.del();
+                                        layer.close(index);
+                                    });
+                                }
+                            })
+                        })
+                    }
+                }
+            }
+        })
+        return count;
+    }
+
+    function ajaxGetBookLists(url, type, bname, author, press, pageItem, limit) {
+        var datas = '{"bname":"' + bname + '","author":"' + author + '","press":"' + press + '","pageItem":' + pageItem + ',"limit":' + limit + '}';//"'cid':'" + d + "', 'pageItem': '1', 'limit': '5' ";//'{name:"jack"}';
+        var json = JSON.parse(datas);
+        var count = 0;
+        $.ajax({
+            url: url,
+            data: json,
+            async: false,
+            type: 'POST',
+            success: function (res) {
+                //console.log(res.data);
+                if (res.code == '200') {
+                    var data = res.data;
+                    count = data.TotalItems;
+                    if (data.Items.length > 0) {
+                        layui.use('table', function () {
+                            var table = layui.table;
+                            //第一个实例
+                            table.render({
+                                elem: '#mytable'
+                                , page: false //开启分页
+                                , data: data.Items
+                                , minWidth: 100
+                                , cols: [[ //表头
+                                    { title: '序号', templet: '#indexTpl' }
+                                    //{ field: 'bid', title: '图书ID',sort: true,width:200, fixed: 'left', align: 'center' }
+                                    , { field: 'bname', title: '图书名称', width: 200 }
+                                    , { field: 'author', title: '作者', width: 150, align: 'center', sort: true }
+                                    , { field: 'price', title: '原价', width: 70, align: 'center', sort: true }
+                                    , { field: 'currPrice', title: '售价', width: 70, align: 'center', sort: true }
+                                    , { field: 'discount', title: '折扣', width: 70, align: 'center', sort: true }
+                                    , { field: 'press', title: '出版社', width: 130, align: 'center', sort: true }
+                                    , { field: 'publishtime', title: '出版时间', width: 100, align: 'center', sort: true }
+                                    , { field: 'edition', title: '版次', width: 60, align: 'center' }
+                                    , { field: 'pageNum', title: '页数', width: 70, align: 'center' }
+                                    , { field: 'wordNum', title: '字数', width: 100, align: 'center' }
+                                    , { field: 'printtime', title: '打印时间', width: 100, align: 'center', sort: true }
+                                    , { field: 'booksize', title: '规格', width: 60, align: 'center' }
+                                    , { field: 'paper', title: '纸质', width: 80, align: 'center' }
+                                    //, { field: 'cid', title: '分类ID', width: 100, align: 'center' }
+                                    , { field: 'image_w', title: '小图片', width: 100, align: 'center' }
+                                    , { field: 'image_b', title: '大图片', width: 100, align: 'center' }
+                                    , { field: 'orderBy', title: '排序字段', width: 100, align: 'center', sort: true }
+                                    , { fixed: 'right', title: '操作', width: 160, align: 'center', toolbar: '#bar' }
+                                ]]
+                            });
+                            //监听工具条
+                            table.on('tool(tableDel)', function (obj) {
+                                var data = obj.data;
+                                if (obj.event === 'del') {
+                                    layer.confirm('确定要删除么？', function (index) {
+                                        obj.del();
+                                        layer.close(index);
+                                    });
+                                }
+                            })
+                        })
+                    }
+                }
+            }
+        })
+        return count;
+    }
+    //高级搜索弹框
+    function gjSearch() {
+        //高级搜索弹框
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                type: 1,
+                title: '高级搜索',
+                content: $('#divGjSearch'),
+                success: function (layero, index) {
+
+                }
+            });
+        })
+    }
+    //添加图书信息弹框
+    function addBookInfo() {
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            layer.open({
+                type: 1,
+                title: '添加图书信息',
+                content: $('#divAddBook'),
+                area: ['800px', '500px'],
+                success: function (layero, index) {
+                    loadParent();
+                    $("#btn").addClass("btn1");
+                    $("#btn").hover(
+                        function () {
+                            $("#btn").removeClass("btn1");
+                            $("#btn").addClass("btn2");
+                        },
+                        function () {
+                            $("#btn").removeClass("btn2");
+                            $("#btn").addClass("btn1");
+                        }
+                    );
+
+                    $("#btn").click(function () {
+                        var bname = $("#bname").val();
+                        var currPrice = $("#currPrice").val();
+                        var price = $("#price").val();
+                        var discount = $("#discount").val();
+                        var author = $("#author").val();
+                        var press = $("#press").val();
+                        var pid = $("#pid").val();
+                        var cid = $("#cid").val();
+                        var image_w = $("#image_w").val();
+                        var image_b = $("#image_b").val();
+
+                        if (!bname || !currPrice || !price || !discount || !author || !press || !pid || !cid || !image_w || !image_b) {
+                            layer.msg("图名、当前价、定价、折扣、作者、出版社、1级分类、2级分类、大图、小图都不能为空！");
+                            return false;
+                        }
+
+                        if (isNaN(currPrice) || isNaN(price) || isNaN(discount)) {
+                            layer.msg("当前价、定价、折扣必须是合法小数！");
+                            return false;
+                        }
+                        $("#form").submit();
+                    });
+                }
+            });
+        })
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#publishtime' //指定元素
+            });
+            laydate.render({
+                elem: '#printtime' //指定元素
+            });
+        })
+        //$("#file1 input[type='file']").change(function () {
+        //    var file = this.files[0];
+        //    if (window.FileReader) {
+        //        var reader = new FileReader();
+        //        reader.readAsDataURL(file);
+        //        //监听文件读取结束后事件    
+        //        reader.onloadend = function (e) {
+        //            $("#img_w").val(e.target.result);    //e.target.result就是最后的路径地址
+        //            //console.log($("#img_w").val())
+        //        };
+        //    }
+        //});
+    }
+
+    //加载一级分类
+    function loadParent() {
+        $.ajax({
+            url: '/Category/CategoryFirst',
+            type: 'POST',
+            async: true,
+            success: function (res) {
+                //console.log(res);
+                if (res.code == '200') {
+                    //console.log(res.data);
+                    var data = res.data;
+                    var html = '';
+                    $("#pid").html('');
+                    $("#pid").append($("<option>====请选择1级分类====</option>"));//4.添加头
+                    for (var i = 0; i < data.length; i++) {
+                        //html += $("<option>").val(data[i].cid).text(data[i].cname);
+                        html += "<option value='" + data[i].cid + "'>" + data[i].cname + "</option>";
+                    }
+                    $("#pid").append(html);
+                }
+            }
+        });
+    }
+    //加载二级分类
+    function loadChildren() {
+        var pid = $("#pid").val();
+        $.ajax({
+            url: '/Category/CategorySecond',
+            type: 'POST',
+            async: false,
+            data: { 'pid': pid },
+            success: function (result) {
+                if (result.code == '200') {
+                    var datas = result.data;
+                    var option = '';
+                    $("#cid").html('');
+                    $("#cid").append($("<option>====请选择2级分类====</option>"));//4.添加头
+                    for (var j = 0; j < datas.length; j++) {
+                        option += "<option value='" + datas[j].cid + "'>" + datas[j].cname + "</option>";
+                    }
+                    $("#cid").append(option);
+                }
+            }
+        })
+        
+    }
+
+</script>

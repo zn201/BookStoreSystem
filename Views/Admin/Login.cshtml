@@ -1,0 +1,65 @@
+﻿@model MMBookStore.Models.Entity.Error
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<link type="text/css" href="/Content/CSS/User/Login.css" rel="stylesheet" />
+
+<div class="main">
+    <div><img src="" /></div>
+    <div>
+        <div class="login1">
+            <div class="login2">
+                <div class="loginTopDiv">
+                    <span class="loginTop">管理员登录</span>
+                </div>
+                <div>
+                    <form target="_top" action="/Admin/loginForm" method="post" id="loginForm">
+                        <table>
+                            <tr>
+                                <td width="50"></td>
+                                <td><label class="error" id="msg">@Html.DisplayFor(model => model.loginError)</label></td>
+                            </tr>
+                            <tr>
+                                <td width="50">用户名</td>
+                                <td><input class="input" type="text" name="loginname" id="loginname" /></td>
+                            </tr>
+                            <tr>
+                                <td height="20">&nbsp;</td>
+                                <td><label id="loginnameError" class="error"></label></td>
+                            </tr>
+                            <tr>
+                                <td>密　码</td>
+                                <td><input class="input" type="password" name="loginpass" id="loginpass" /></td>
+                            </tr>
+                            <tr>
+                                <td height="20">&nbsp;</td>
+                                <td><label id="loginpassError" class="error"></label></td>
+                            </tr>
+                            <tr>
+                                <td>验证码</td>
+                                <td>
+                                    <input class="input yzm" type="text" name="verifyCode" id="verifyCode" />
+                                    <img id="vCode" src="/User/GetSecurityCode" />
+                                    <a href="javascript:_hyz()">换张图</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="20px">&nbsp;</td>
+                                <td><label id="verifyCodeError" class="error"></label></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td align="left">
+                                    <input type="image" id="submit" src="~/Content/images/login1.jpg" class="loginBtn" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="/Scripts/User/Login.js"></script>

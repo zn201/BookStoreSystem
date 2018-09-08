@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/CSS/layout.css" rel="stylesheet" />
+    <style type="text/css">
+        .mF_qiyi-qqyue * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            list-style: none;
+        }
+
+        .mF_qiyi-qqyue {
+            position: relative;
+            width: 565px;
+            height: 215px;
+            overflow: hidden;
+            font: 12px/1.5 Verdana;
+            text-align: left;
+            background: #fff;
+            visibility: visible !important;
+        }
+
+            .mF_qiyi-qqyue .loading {
+                position: absolute;
+                z-index: 9999;
+                width: 100%;
+                height: 100%;
+                color: #666;
+                text-align: center;
+                padding-top: 64.5px;
+                background: #fff url(/Content/images/loading.gif) center 86px no-repeat;
+            }
+
+            .mF_qiyi-qqyue .pic {
+                position: relative;
+                width: 565px;
+                height: 215px;
+                overflow: hidden;
+            }
+
+            .mF_qiyi-qqyue .txt li, .mF_qiyi-qqyue .txt li span, .mF_qiyi-qqyue .txt-bg {
+                width: 565px;
+                height: defaultpx !important;
+                line-height: defaultpx !important;
+                overflow: hidden;
+            }
+
+                .mF_qiyi-qqyue .txt li p a {
+                    display: inline;
+                }
+    </style>
+</head>
+<body>
+    @*顶部信息*@
+    <div id="site-nav-bg">
+    </div>
+    @*顶部Logo*@
+    <div id="panel">
+
+        <div id="header">
+            <div id="site-nav">
+                <ul class="top-dengru">
+                    <li class="loginInfo" style="display: none">您好！<span class="userName" style="color:#e95809"></span></li>
+                    <li class="loginInfo" style="display: none">
+                        <a class="f-bold f-hei" href="/User/quit">
+                            退出
+                        </a>
+                    </li>
+                    <li class="welcome">您好,欢迎光临喵喵购书网</li>
+                    <li class="welcome">
+                        <a id="loginLink" class="f-bold f-cheng" href="/User/Login">
+                            登录
+                        </a> <span class="f-hui-line">| </span>&nbsp;<a id="regLink" class="f-cheng f-bold" href="/User/Regist">注册</a>
+                    </li>
+                </ul>
+                <div class="quick-link-box" style="position: relative">
+                    <ul class="quick-link">
+                        <li>
+                            <a target="_blank" class="f-green" href="">
+                                帮助中心
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" class="f-cheng-A" href="javascript:;" onclick="myMiaoMiao()">
+                                我的喵喵
+                            </a>
+                        </li>
+                        <li>
+                            <a target="_blank" class="f-cheng-A" href="javascript:;" onclick="myOrderCenter()">
+                                我的订单
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bg-wrapper">
+
+                <div class="bannerA-768">
+                </div>
+                <div class="menu-box">
+                    <ul class="menu-Zhu">
+                        <li style="background: none"><a id="index" class="menu-home" href="/Home/Index">首页</a></li>
+                        @*<li><a id="promotion" class="menu-home" href="">促销</a></li>*@
+                    </ul>
+                </div>
+                <div class="loge">
+                    <a href="/Home/Index">
+                        <img src="~/Content/images/logo.png" alt="喵喵购书网" style="width:120px;height:75px;">
+                    </a>
+                </div>
+            </div>
+            <div class="menu-second">
+                <div class="allsort">
+                    <dl class="mt">
+                        <dt>全部产品分类</dt>
+                        <dd class="extra">
+                        </dd>
+                    </dl>
+                    <div class="Jtab-newhead">
+                        @*左侧菜单栏*@
+                        <div class="mod-menu">
+                            <ul class="menu-item"></ul><!--一级菜单列表-->
+                            <div class='menu-cont' style='display:none;'>
+                            </div>
+                        </div>
+
+                        <div class="W190 Jtab W190-BJ">
+                            <h1 class="title190-A">
+                                促销看板
+                            </h1>
+                            <div class="Jmenudiv">
+                                <div class="CXimgA130-200" style="display: none;"><a href="" target="_blank"><img src="~/Content/book_img/171207b.jpg" width="130"></a></div>
+                                <div class="CXimgA130-200" style="display: none;"><a href="" target="_blank"><img src="~/Content/book_img/171207c.jpg " width="130"></a></div>
+                                <div class="CXimgA130-200" style="display: block;"><a href="" target="_blank"><img src="~/Content/book_img/171207d.jpg " width="130"></a></div>
+                            </div>
+                            <div class="Jmenu">
+                                <ul class="Munber">
+                                    <li class="current">1</li>
+                                    <li class="">2</li>
+                                    <li class="">3</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <ul class="search-panel">
+                    <form id="search" action="/Search/searchBook">
+                        <li>
+                            <input class="search-textA" type="text" oldv="" value="" id="q" name="q" style="color: rgb(204, 204, 204);">
+                        </li>
+                        <li>
+                            <input name="submit" type="submit" id="btn-search" value="搜 索">&nbsp; &nbsp;&nbsp;&nbsp;
+                        </li>
+                        <li><a href="/Search/gjSearch" target="_blank" class="f-bai f-14bold" style="line-height: 26px;">高级搜索</a></li>
+                    </form>
+                </ul>
+                <div class="mycart-box">
+                    <ul id="mycart">
+                        <li id="i-mycart" class="fore1">
+                            <a class="f-cart" href="javascript:myCart()">
+                                购物车&nbsp;&nbsp;<span id="mycart-amount" class="f-Price">0</span>&nbsp;&nbsp;件
+                            </a>
+                        </li>
+                        <li class="fore2">
+                            <a class="f-bai f-bold" style="font-size: 12px;" href="javascript:myCart()">
+                                去结算
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        @RenderBody()
+        <div id="footer" class="w980">
+            <div class="serve-box2">
+                <ul class="add">
+                    <ul>
+                        <li>
+                            <a href="" target="_blank">关于喵喵读书人</a>
+                            | <a href="" target="_blank">合作伙伴</a>
+                            | <a href="" target="_blank">友情链接</a> |<a href="javascript:myCart();" target="_blank">购物车</a> |
+                            <a href="javascript:myMiaoMiao();" target="_blank">我的帐户</a> | <a href="" target="_blank">帮助中心</a> | <a href="" target="_blank">
+                                订单查询
+                            </a> | <a href="" target="_blank">交易条款</a>
+                        </li>
+                    </ul>
+                    <li>服务E-mail:service@mmread.com | 订购E-mail:order@mmread.com</li>
+                    <li>Copyright@2018 喵喵购书网, All Rights Reserved</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
+    <script src="~/Scripts/layui/layui.js"></script>
+    <script src="~/Scripts/layout.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            
+            //alert($("#mycart-amount").html());
+            $.ajax({
+                url: '/Category/CategoryFirst',
+                type: 'POST',
+                async: false,
+                success: function (res) {
+                    //console.log(res);
+                    if (res.code == '200') {
+                        //console.log(res.data);
+                        var data = res.data;
+                        var html = "";
+                        for (var i = 0; i < data.length; i++) {
+                            $(".menu-item").append("<li><a href='javascript:void (0)'>" + data[i].cname + "</a></li>");
+                            var pid = data[i].cid;
+                            $.ajax({
+                                url: '/Category/CategorySecond',
+                                type: 'POST',
+                                async: false,
+                                data: { 'pid': pid },
+                                success: function (result) {
+                                    if (result.code == '200') {
+                                        var data = result.data;
+                                        html += "<div class='menu-cont-list' style = 'display:none;'><ul>";
+                                        for (var i = 0; i < data.length; i++) {
+                                            //console.log(data[i].cname);
+                                            html += "<li><a href='/Book/BookList?cid=" + data[i].cid + "'>" + data[i].cname + "</a></li>";
+                                        }
+                                        html += "</ul> </div>";
+                                        //console.log(html);
+
+
+                                    }
+                                }
+                            })
+                        }
+                        $(".menu-cont").append(html);
+                        //$(".mod-menu").append("<div class='menu-cont' style='display:none;'>"+html);
+                    }
+                    var mod_menu = $(".mod-menu");//导航模块区
+                    var menu = function () {
+                        var menuItem = $(".menu-item li");//选择导航列表
+                        menuItem.each(function () {
+                            var _index = $(this).index();//获取当前选择菜单列表的索引
+                            //var _index = $('.menu-item a').index(this);
+                            //alert(_index);
+                            $(this).mouseenter(function () {
+                                var y = $(this).position().top + 1;//获取当前鼠标滑过的列表的顶部坐标
+                                //alert(y)
+                                $(".menu-cont").show();
+                                $(".menu-cont").css("top", y);//需要显示的对应索引内容
+                                $(this).addClass("mouse-bg").siblings().removeClass("mouse-bg");
+                                $(".menu-cont>div").eq(_index).show().siblings().hide();
+                            });
+                        });/*导航菜单菜单*/
+                        $(".mod-menu").mouseleave(function () {
+                            $(".menu-cont").hide();
+                            menuItem.removeClass("mouse-bg");
+                        })
+                    }//展开二级菜单
+                    menu();//执行展开二级菜单函
+                }
+            });
+            var amount = UserStatus();
+            $("#mycart-amount").html(amount);
+        });
+        function UserStatus() {
+            var amount=0;
+            $.ajax({
+                url: '/User/islogin',
+                type: 'POST',
+                async: false,
+                success: function (res) {
+                    //console.log(res);
+                    if (res.code == '200') {
+                        //console.log(res.loginname);
+                        $(".welcome").hide();
+                        $(".userName").text(res.loginname);
+                        $(".loginInfo").show();
+                        //var amount = 0;
+                        $.ajax({
+                            url: '/Cart/queryCartItem',
+                            data: { loginname: res.loginname},
+                            async: false,
+                            type: 'POST',
+                            success: function (res) {
+                                //console.log(res);
+                                if (res.code == '200') {
+                                    //alert(res.amount);
+                                    $("#mycart-amount").html("");
+                                    amount = res.data.length;
+                                }
+                            }
+                        });
+                    } else if (res.code == '100') {
+                        $(".loginInfo").hide();
+                        $(".welcome").show();
+                    }
+                }
+            });
+            return amount;
+        }
+        function myMiaoMiao() {
+            var myaccount = $(".userName").text();
+            if (myaccount == '') {
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.msg('请先登录，再操作', { icon: 5, time: 3000 }, function () {
+                        location.href = '/User/Login';
+                    });
+                })
+            } else {
+                location.href = '/User/userAccount';
+            }
+        }
+        function myOrderCenter() {
+            var myaccount = $(".userName").text();
+            if (myaccount == '') {
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.msg('请先登录，再操作', { icon: 5, time: 3000 }, function () {
+                        location.href = '/User/Login';
+                    });
+                })
+            } else {
+                location.href = '/Order/myOrder';
+            }
+        }
+        function myCart() {
+            var myaccount = $(".userName").text();
+            if (myaccount == '') {
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.msg('请先登录，再操作', { icon: 5, time: 3000 }, function () {
+                        location.href = '/User/Login';
+                    });
+                })
+            } else {
+                location.href = '/Cart/Cart';
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+﻿
+@{
+    ViewBag.Title = "userAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/CSS/User/userAccount.css" rel="stylesheet" />
+<link href="~/Scripts/layui/css/layui.css" rel="stylesheet" />
+
+<div id="m99-left" class="W160">
+    <a href="">
+        <h1 class="m99-title">
+            <span style="display: none">m99</span>
+        </h1>
+    </a>
+    <div class="menu-m99-box line-gray2px">
+        <dl class="menu-m99-nav">
+            <dt>个人账户管理</dt>
+            <dd>
+                <a class="f-m99-nav" href="javascript:userInfo();">账户信息</a>
+            </dd>
+            @*<dd>
+                <a class="f-m99-nav" href="javascript:alterPwd();">密码修改</a>
+            </dd>*@
+            @*<dd>
+                <a class="f-m99-nav" href="javascript:orderManage();">订单管理</a>
+            </dd>*@
+        </dl>
+    </div>
+</div>
+
+
+<div class="W800 line-gray" id="m99-panel">
+    <h2 class="title-800A">
+        <span class="title_info">账户信息</span>
+    </h2>
+
+    <div id="userInfo">
+        <form action="" id="formSaveMemberInfo" method="post">
+            <ul class="user-infoC">
+                <li>
+                    <label class="user-info-bj1">
+                        <font color="red">*</font>用户名：
+                    </label>
+                    <span>
+                        <input class="layui-input" id="loginname" maxlength="50" name="loginname" style="width: 300px;float:left;  display:inline; margin-right:10px;" type="text" value="">
+                        <span class="errspa"></span>
+                    </span>
+                </li>
+                <li>
+                    <label class="user-info-bj1">
+                        <font color="red">*</font>邮箱：
+                    </label>
+                    <span>
+                        <input class="layui-input" id="email" maxlength="32" name="email" style="width: 300px;float:left;  display:inline; margin-right:10px;" type="text" value="">
+
+                    </span>
+                </li>
+                <li>
+                    <label class="user-info-bj1">
+                        <font color="red">*</font>收货人：
+                    </label>
+                    <span>
+                        <input class="layui-input" id="name" maxlength="50" name="name" style="width: 300px;float:left;  display:inline; margin-right:10px;" type="text" value="">
+                        <span class="errspa"></span>
+                    </span>
+                </li>
+                <li>
+                    <label class="user-info-bj1">
+                        <font color="red">*</font>电话号码：
+                    </label>
+                    <span>
+                        <input class="layui-input" id="phone" maxlength="11" name="phone" style="width: 300px;float:left;display:inline; margin-right:10px;" type="text" value="">
+
+                    </span>
+                </li>
+                <li>
+                    <label class="user-info-bj1">
+                        <font color="red">*</font>地 址：
+                    </label>
+                    <span>
+                        <input class="layui-input" id="address" maxlength="100" name="address" style="width: 300px;float:left;  display:inline; margin-right:10px;" type="text" value="">
+                    </span>
+                </li>
+
+                <li style="padding-left: 200px; width: 400px;">
+                    <input type="button" style="float: left; display: inline; margin: 0px 20px" value="确认" id="SaveMemberAddress" tabindex="3" class="btn-A" onclick="SaveUserInfo()">
+                </li>
+            </ul>
+            <input id="uid" name="uid"  type="hidden" value="">
+
+        </form>
+    </div>
+    @*<div id="alterPwd" hidden>
+        <ul class="user-info" style="padding-left: 120px; width: 300px; padding-top: 15px;
+                        text-align: left">
+            <li>
+                <label class="user-info-bj1">
+                    原密码：
+                </label>
+                <span>
+                    <input class="ipt_tx" id="password" maxlength="16" name="password" style="float:left;margin-right:10px" type="password">
+                </span>
+                <span id="error2">
+                </span>
+            </li>
+            <li>
+                <label class="user-info-bj1">
+                    新密码：
+                </label>
+                <span>
+                    <input class="ipt_tx" id="newPassword" maxlength="16" name="newPassword" style="float:left;margin-right:10px" type="password">
+                </span>
+                <span id="error3">
+
+                    <span class="f-red">* </span>6~16个字符字母、数字、特殊符号区分大小写
+                </span>
+            </li>
+            <li>
+                <label class="user-info-bj1">
+                    确认新密码：
+                </label>
+                <span>
+                    <input class="ipt_tx" id="newPassword2" maxlength="16" name="newPassword2" style="float:left;margin-right:10px" type="password">
+                </span>
+                <span id="error">
+                </span>
+            </li>
+            <li>
+                <span style="padding-left: 85px;">
+                    <input type="submit" name="btnNext" style="float: left; display: inline; margin: 0px 20px" value="确认" onclick="" id="btnNext" tabindex="3" class="btn-A">
+                </span>
+            </li>
+        </ul>
+    </div>*@
+    @*<div id="orderManage" hidden>
+        <div class="m99-box800">
+            <h2 class="menu-T800">
+                <div id="divAddressList">
+                    <span class="f-m99-T800">已收货</span>
+                    <a class="f-m99-T800" href="">新增地址</a>
+                </div>
+            </h2>
+            <div id="divList">
+                <table width="780" border="0" cellpadding="0" cellspacing="0" class="m99-table-A">
+                    <thead class="m99-thead">
+                        <tr>
+                            <td width="78">收货人</td>
+                            <td width="200"> 所在地区</td>
+                            <td width="145">街道地址</td>
+                            <td width="79"> 邮编</td>
+                            <td width="101">电话/手机</td>
+                            <td width="80">操作</td>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr class="bj-tr-red">
+                            <td>
+                                zn
+                            </td>
+                            <td class="align_Left">
+                                湖北省咸宁市通山县
+                            </td>
+                            <td class="align_Left">
+                                山东省枣庄市泰坦坠饰
+                            </td>
+                            <td>
+                                265600
+                            </td>
+                            <td>
+                                17834598564
+                            </td>
+                            <td>
+                                <a class="f-lan" href="">修改</a>
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>*@
+
+</div>
+<script src="~/Scripts/jquery-1.8.2.js"></script>
+<script src="~/Scripts/layui/layui.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: '/User/islogin',
+            type: 'POST',
+            async: false,
+            success: function (res) {
+                //console.log(res);
+                if (res.code == '200') {
+                    //console.log(res.loginname);
+                    $(".welcome").hide();
+                    $(".userName").text(res.loginname);
+                    $(".loginInfo").show();
+                    //var amount = 0;
+                    $.ajax({
+                        url: '/Cart/queryCartItem',
+                        data: { 'loginname': res.loginname },
+                        async: false,
+                        type: 'POST',
+                        success: function (res) {
+                            //console.log(res);
+                            if (res.code == '200') {
+                                //alert(res.amount);
+                                $("#mycart-amount").html("");
+                                amount = res.amount;
+                            }
+                        }
+                    });
+                    //获取当前用户的信息
+                    var loginname = $(".userName").text();
+                    $.ajax({
+                        url: '/Cart/findUserByloginname',
+                        type: 'POST',
+                        data: { loginname: loginname },
+                        dataType: 'json',
+                        async: false,
+                        success: function (res) {
+                            if (res.code == '200') {
+                                if (res.data != null) {
+                                    var d = res.data;
+                                    $("#name").val(d.name);
+                                    $("#phone").val(d.phone);
+                                    $("#address").val(d.address);
+                                    $("#loginname").val(d.loginname);
+                                    $("#email").val(d.email);
+                                    $("#uid").val(d.uid);
+                                }
+                            }
+                        }
+                    })
+                } else if (res.code == '100') {
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        layer.msg(res.msg, { icon: 5, time: 3000 }, function () {
+                            location.href = '/User/Login';
+                        });
+                    })
+                }
+            }
+        });
+
+        $(".Jtab-newhead").hide();
+        $(".Jtab").hide();
+    });
+    function userInfo() {
+        $("#m99-center").hide();
+        $("#m99-right").hide();
+        $("#orderManage").hide();
+        $("#alterPwd").hide();
+        $("#m99-panel").show();
+        $("#userInfo").show();
+        $(".title_info").text("账户信息")
+    }
+    //function alterPwd() {
+    //    $("#m99-center").hide();
+    //    $("#m99-right").hide();
+    //    $("#orderManage").hide();
+    //    $("#userInfo").hide();
+    //    $("#m99-panel").show();
+    //    $("#alterPwd").show();
+    //    $(".title_info").text("修改密码")
+    //}
+    //function orderManage() {
+    //    $("#m99-center").hide();
+    //    $("#m99-right").hide();
+    //    $("#userInfo").hide();
+    //    $("#alterPwd").hide();
+    //    $("#m99-panel").show();
+    //    $("#orderManage").show();
+    //    $(".title_info").text("订单管理")
+    //}
+    function SaveUserInfo() {
+        var loginname = $("#loginname").val();
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var phone = $("#phone").val();
+        var address = $("#address").val();
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            if (loginname == '') { layer.msg = '用户名不能为空！'; return; }
+            if (name == '') { layer.msg = '收货人不能为空！'; return; }
+            if (email == '') { layer.msg = '邮箱不能为空！'; return; }
+            if (phone == '') { layer.msg = '联系电话不能为空！'; return; }
+            if (address == '') { layer.msg = '地址不能为空！'; return; }
+            $.ajax({
+                url: '/User/SaveUserInfo',
+                data: $("#formSaveMemberInfo").serialize(),
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                success: function (res) {
+                    if (res.code == '200') {
+                        layer.msg(res.msg);
+                    } else {
+                        layer.msg(res.msg);
+                    }
+                }
+            })
+        })
+        
+    }
+</script>
+
